@@ -1,12 +1,25 @@
-# Tauri + React + Typescript
+# XhotIt
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+Just another screenshot app
 
 ## Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 
+## Development
 
-## Based on
+Install deps
 
-https://github.com/dimaportenko/code-helper
+```bash
+bun install
+```
+
+Run app in your local
+
+```bash
+bun run tdev
+```
+
+## Credits
+
++ Most of code coming from [dimaportenko/code-helper](https://github.com/dimaportenko/code-helper)

@@ -19,16 +19,16 @@ fn main() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_window_state::Builder::new().build())
         .setup(|app| {
-            let capture_i = MenuItem::with_id(app, "xhot", "Xhot", true, None::<&str>)?;
-
             let capture_active_i =
-                MenuItem::with_id(app, "xhot_active", "Xhot Active Window", true, None::<&str>)?;
+                MenuItem::with_id(app, "xhot_active", "Xhot Active Window", true, Some("CmdOrCtrl+Shift+A"))?;
 
-            let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
+            let capture_i = MenuItem::with_id(app, "xhot", "Xhot", true, Some("CmdOrCtrl+Shift+S"))?;
 
-            let menu = Menu::with_items(app, &[&quit_i, &capture_i, &capture_active_i])?;
+            let quit_i = MenuItem::with_id(app, "quit", "Quit", true, Some("Q"))?;
 
-            let tray = TrayIconBuilder::new()
+            let menu = Menu::with_items(app, &[&capture_active_i, &capture_i, &quit_i])?;
+
+            let _tray = TrayIconBuilder::new()
                 .icon(app.default_window_icon().unwrap().clone())
                 .menu(&menu)
                 .on_menu_event(|app, event| match event.id.as_ref() {

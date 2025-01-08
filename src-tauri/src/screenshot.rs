@@ -69,12 +69,13 @@ fn get_screenshot_path(app_handle: &AppHandle) -> PathBuf {
     } else {
         println!("Path already exists");
     }
+
     // generate timestamp screenshot name
     let screenshot_name = chrono::Local::now()
-        .format("%Y-%m-%d_%H-%M-%S.png")
+        .format("xhot-%Y-%m-%d_%H-%M-%S.png")
         .to_string();
-    app_dir.push(screenshot_name);
 
+    app_dir.push(screenshot_name);
     app_dir
 }
 
@@ -84,7 +85,6 @@ pub fn capture_window(app_handle: &AppHandle) {
 
     dir::create_all("target/windows", true).unwrap();
 
-    let mut i = 0;
     for window in windows {
         if window.is_minimized() || window.app_name() == "Dock" || window.app_name() == "xhotit" {
             continue;
@@ -106,8 +106,6 @@ pub fn capture_window(app_handle: &AppHandle) {
         let image = window.capture_image().unwrap();
 
         image.save(screenshot_path).unwrap();
-
-        i += 1;
     }
 
     println!("运行耗时: {:?}", start.elapsed());

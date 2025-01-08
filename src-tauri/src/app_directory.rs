@@ -1,6 +1,6 @@
 use directories::UserDirs;
 use std::{fs, path::PathBuf, process::Command as ProcessCommand, time::SystemTime};
-use tauri::{command, AppHandle, Manager};
+use tauri::{command, AppHandle};
 
 pub fn list_images_in_directory_sorted(
     app: &AppHandle,

@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "xhotit",
+  "productName": "Xhot It",
   "version": "1.0.0",
   "identifier": "com.xhotit.app",
   "build": {
@@ -10,10 +10,10 @@
     "frontendDist": "../dist"
   },
   "app": {
-
+    "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "xhotit",
+        "title": "Xhot It",
         "width": 800,
         "height": 600
       }

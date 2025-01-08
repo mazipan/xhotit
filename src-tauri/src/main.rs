@@ -16,13 +16,23 @@ mod utils;
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_upload::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_window_state::Builder::new().build())
         .setup(|app| {
-            let capture_active_i =
-                MenuItem::with_id(app, "xhot_active", "Xhot Active Window", true, Some("CmdOrCtrl+Shift+A"))?;
+            #[cfg(target_os = "macos")]
+            app.set_activation_policy(tauri::ActivationPolicy::Accessory);
 
-            let capture_i = MenuItem::with_id(app, "xhot", "Xhot", true, Some("CmdOrCtrl+Shift+S"))?;
+            let capture_active_i = MenuItem::with_id(
+                app,
+                "xhot_active",
+                "Xhot Active Window",
+                true,
+                Some("CmdOrCtrl+Shift+A"),
+            )?;
+
+            let capture_i =
+                MenuItem::with_id(app, "xhot", "Xhot", true, Some("CmdOrCtrl+Shift+S"))?;
 
             let quit_i = MenuItem::with_id(app, "quit", "Quit", true, Some("Q"))?;
 

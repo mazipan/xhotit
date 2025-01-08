@@ -7,6 +7,15 @@
     "core:default",
     "opener:default",
     "window-state:default",
+    "upload:default",
+    {
+      "identifier": "fs:allow-download-write",
+      "allow": [{ "path": "$DOWNLOAD/**" }]
+    },
+    {
+      "identifier": "fs:allow-download-write-recursive",
+      "allow": [{ "path": "$DOWNLOAD/**" }]
+    },
     {
       "identifier": "fs:scope",
       "allow": [

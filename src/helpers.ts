@@ -1,21 +1,27 @@
+import { BaseDirectory, writeFile } from '@tauri-apps/plugin-fs';
+// @ts-ignore
+import domtoimage from 'dom-to-image-more';
+
+export const APP_DOWNLOAD_DIR = 'xhotit-screenshots';
+
 export type ScreenshotItem = {
   filePath: string;
   assetPath: string;
 };
 
-export function getAssetFilename (str?: ScreenshotItem) {
+export function getAssetFilename(str?: ScreenshotItem) {
   if (!str) {
-    return ''
+    return '';
   }
-  const parts = str?.assetPath.split("%2F");
-  return parts[parts.length - 1]
+  const parts = str?.assetPath.split('%2F');
+  return parts[parts.length - 1];
 }
 
 export type ClassMap = {
-  id: string
-  class: string
-  cssNative?: string
-}
+  id: string;
+  class: string;
+  cssNative?: string;
+};
 
 // Pick from https://hypercolor.dev/
 export const GRADIENTS: ClassMap[] = [
@@ -108,4 +114,110 @@ export const GRADIENTS: ClassMap[] = [
     cssNative:
       'linear-gradient(to right, rgb(255, 228, 230), rgb(204, 251, 241))',
   },
-]
+];
+
+/**
+ * @see https://dev.to/nombrekeff/download-file-from-blob-21ho
+ * @param blob <Blob>
+ * @param filename <string>
+ */
+export function downloadFromHref(href: string, filename: string) {
+  fetch(href, {
+    headers: new Headers({
+      Origin: location.origin,
+    }),
+    mode: 'cors',
+  })
+    .then((response) => response.blob())
+    .then((blob) => {
+      let blobUrl = window.URL.createObjectURL(blob);
+      let link = document.createElement('a');
+      link.setAttribute('download', filename);
+      link.href = blobUrl;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  // // Create a link element
+  // const link = document.createElement('a')
+
+  // link.href = href
+  // link.download = filename
+  // link.setAttribute('data-filename', filename)
+  // link.style.display = 'none'
+
+  // // Append link to the body
+  // document.body.appendChild(link)
+
+  // // Dispatch click event on the link
+  // // This is necessary as link.click() does not work on the latest firefox
+  // link.dispatchEvent(
+  //   new MouseEvent('click', {
+  //     bubbles: true,
+  //     cancelable: true,
+  //     view: window,
+  //   }),
+  // )
+
+  // // Remove link from body
+  // document.body.removeChild(link)
+}
+
+export function downloadImageFromDom(elementWrapperId: string, elementImageId: string) {
+  const domWrapper = document.querySelector(`#${elementWrapperId}`);
+  const domImage = document.querySelector(`#${elementImageId}`);
+
+  if (domImage) {
+    // @ts-ignore
+    domImage.style.width = "1200px";
+  }
+
+  if (domWrapper) {
+    const timestamp = new Date()
+      .toISOString()
+      .replace(/:/, '-')
+      .replace('T', '_')
+      .replace('Z', '')
+      .trim();
+
+    // eslint-disable-next-line
+    // @ts-ignore
+    domtoimage
+      .toPng(domWrapper)
+      .then((dataUrl: string) => {
+        const filename = `xhot-editted-${timestamp}.png`;
+
+        fetch(dataUrl, {
+          headers: new Headers({
+            Origin: location.origin,
+          }),
+          mode: 'cors',
+        })
+          .then((response) => response.arrayBuffer())
+          .then(async (buffer) => {
+            console.log("Byte length", buffer.byteLength)
+            const contents = [...new Uint8Array(buffer, 0, buffer.byteLength)];
+
+            await writeFile(`${filename}`, contents, {
+              baseDir: BaseDirectory.Download,
+            });
+
+            if (domImage) {
+              // @ts-ignore
+              // domImage.style.removeProperty('width');
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error: Error) => {
+        console.error('Opps, something went wrong!', error);
+      });
+  }
+}

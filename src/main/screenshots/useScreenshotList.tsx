@@ -5,11 +5,9 @@ import { ScreenshotItem } from "../../helpers";
 export const useScreenshotList = () => {
   const [screenshots, setScreenshots] = useState<ScreenshotItem[]>([]);
   const getScreenshotsData = async () => {
-    console.log("Getting file paths...");
     invoke("get_screenshot_files")
       .then((files) => {
         const fileSrcs = (files as string[]).map((file) => {
-          console.log("file: ", file);
           return {
             filePath: file,
             assetPath: convertFileSrc(file),

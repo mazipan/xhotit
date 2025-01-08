@@ -26,7 +26,7 @@ fn create_overlay_window(app: &AppHandle) {
     let window = win_builder
         .always_on_top(true)
         .resizable(false)
-        // .transparent(true)
+        .transparent(true)
         .decorations(false)
         .build()
         .unwrap();

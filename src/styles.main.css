@@ -70,6 +70,7 @@ button {
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 }
 
+
 button {
   cursor: pointer;
 }
@@ -91,6 +92,21 @@ button {
   margin-right: 5px;
 }
 
+button.gradient {
+  position: relative;
+  background: #ffffff;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -1;
+    margin: -2px;
+    border-radius: inherit;
+    background: linear-gradient(to right, rgb(236, 72, 153), rgb(239, 68, 68), rgb(234, 179, 8));
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: #f6f6f6;
@@ -106,6 +122,11 @@ button {
     color: #ffffff;
     background-color: #0f0f0f98;
   }
+
+  button.gradient {
+    background: #0f0f0f;
+  }
+
   button:active {
     background-color: #0f0f0f69;
   }

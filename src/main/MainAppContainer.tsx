@@ -1,30 +1,26 @@
 import { invoke } from '@tauri-apps/api/core';
+import { listen } from '@tauri-apps/api/event';
+
 import './App.css';
 
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 
-import { ScreenshotList } from './screenshots/ScreenshotList';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  APP_DOWNLOAD_DIR,
   ClassMap,
   downloadImageFromDom,
   getAssetFilename,
-  ScreenshotItem,
 } from '../helpers';
-import { GradientSelect } from './screenshots/GradientSelect';
+import { GradientSelect } from './GradientSelect';
 import clsx from 'clsx';
-
-const handleOpenAppDirectory = () => {
-  invoke('open_app_directory', { subdirectory: APP_DOWNLOAD_DIR }).catch(
-    (err) => console.error('Error opening downloads directory:', err)
-  );
-};
+import { convertFileSrc } from '@tauri-apps/api/core';
+import { COMMAND, EVENT } from '../constant';
+import { message } from '@tauri-apps/plugin-dialog';
 
 export const MainAppContainer = () => {
   const [selectedScreenshot, setSelectedScreenshot] = useState<
-    ScreenshotItem | undefined
+    string | undefined
   >();
   const [selectedGradient, setSelectedGradient] = useState<ClassMap | null>({
     id: 'hyper',
@@ -37,57 +33,55 @@ export const MainAppContainer = () => {
     downloadImageFromDom('image-wrapper', 'image-el');
   };
 
+  const handleNewCapture = async () => {
+    invoke(COMMAND.OPEN_OVERLAY);
+  }
+
   const [padding, setPadding] = useState<number>(24);
   const [bgRounded, setBgRounded] = useState<number>(48);
   const [imgRounded, setImgRounded] = useState<number>(48);
 
+  useEffect(() => {
+    let unsubscribe = () => {};
+
+    listen(EVENT.ON_SCREENSHOT, (res) => {
+      setSelectedScreenshot(res.payload as string);
+    }).then((fn) => (unsubscribe = fn));
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+
+  useEffect(() => {
+    let unsubscribe = () => {};
+
+    listen(EVENT.ON_GET_ACTIVE_WINDOW, async (res) => {
+      if (res.payload === "error") {
+        await message('Failed when trying to get active window position! Make sure you already give screen record permission', {
+          title: 'Error Info',
+          kind: 'error',
+        });
+      }
+    }).then((fn) => (unsubscribe = fn));
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <div className="relative h-screen w-full">
       <Allotment vertical={false} separator={true}>
-        <Allotment.Pane maxSize={200}>
-          <div
-            id="directory"
-            className="flex flex-col max-w-[200px] border-r border-r-gray-500/30 h-full py-4 px-2"
-          >
-            <h2 className="font-bold text-lg">Screenshot Directory</h2>
-            <div className="flex flex-col flex-1 overflow-y-auto">
-              <ScreenshotList
-                onSelectedChange={(screenshot: ScreenshotItem | undefined) => {
-                  // TODO: Get height and width of images
-                  setSelectedScreenshot(screenshot);
-                }}
-              />
-            </div>
-
-            <div className="flex justify-center">
-              <button
-                onClick={handleOpenAppDirectory}
-                className="flex gap-2 items-center flex-grow"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
-                  />
-                </svg>
-                Open Folder
-              </button>
-            </div>
-          </div>
-        </Allotment.Pane>
 
         <div id="preview" className="flex flex-col items-start gap-6 p-4">
           <h2 className="font-bold text-lg">
             Image Previewer{' '}
-            <small>({getAssetFilename(selectedScreenshot)})</small>
+            {selectedScreenshot && (
+              <small>({getAssetFilename(selectedScreenshot)})</small>
+            )}
+
           </h2>
           <div className="relative overflow-auto">
             {selectedScreenshot ? (
@@ -104,9 +98,9 @@ export const MainAppContainer = () => {
               >
                 <div className="flex flex-col">
                   <img
-                    src={selectedScreenshot?.assetPath}
+                    src={convertFileSrc(selectedScreenshot!)}
                     alt="Image Preview"
-                    className="w-full h-auto object-contain"
+                    className="w-auto h-fit object-contain max-h-[500px]"
                     style={{
                       borderRadius: `${imgRounded - padding}px`,
                     }}
@@ -114,33 +108,55 @@ export const MainAppContainer = () => {
                 </div>
               </div>
             ) : (
-              <div
-                className="flex p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
-                role="alert"
-              >
-                <svg
-                  className="flex-shrink-0 inline w-4 h-4 me-3"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+              <div className="space-y-4 p-4">
+                <div
+                  className="flex p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
+                  role="alert"
                 >
-                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                </svg>
-                <span className="sr-only">Warning</span>
-                <div>
-                  <span className="font-medium">No Image Selected!</span> Select
-                  any image from left pane to preview and modify the background.
+                  <svg
+                    className="flex-shrink-0 inline w-4 h-4 me-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                  </svg>
+                  <span className="sr-only">Warning</span>
+                  <div>
+                    There is no image to shown in this panel. Let's capture new screenshot then the image will be previewed here.
+                  </div>
                 </div>
+
+                <button
+                  onClick={handleNewCapture}
+                  className="gradient flex gap-2 items-center justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M7.5 3.75H6A2.25 2.25 0 0 0 3.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0 1 20.25 6v1.5m0 9V18A2.25 2.25 0 0 1 18 20.25h-1.5m-9 0H6A2.25 2.25 0 0 1 3.75 18v-1.5M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                  Capture New Image
+                </button>
               </div>
             )}
           </div>
         </div>
 
-        <Allotment.Pane minSize={200} maxSize={230} preferredSize={200}>
+        <Allotment.Pane minSize={200} maxSize={400} preferredSize={200}>
           <div id="setting" className="flex flex-col h-full py-4 px-2">
-            <div className="flex flex-col flex-1 overflow-y-auto">
-              <h2 className="font-bold text-lg">Background</h2>
+            <div className="flex flex-col flex-1 overflow-y-auto gap-4">
+              <h2 className="font-bold text-lg">Backdrop</h2>
               <GradientSelect
                 activeGradient={selectedGradient?.id || ''}
                 onClick={(newGradient) => {
@@ -161,7 +177,7 @@ export const MainAppContainer = () => {
                     const newVal = e.target.value;
                     setPadding(parseInt(newVal));
                   }}
-                  className="slider"
+                  className="w-full"
                 />
               </div>
 
@@ -178,7 +194,7 @@ export const MainAppContainer = () => {
                     const newVal = e.target.value;
                     setBgRounded(parseInt(newVal));
                   }}
-                  className="slider"
+                  className="w-full"
                 />
               </div>
 
@@ -195,14 +211,14 @@ export const MainAppContainer = () => {
                     const newVal = e.target.value;
                     setImgRounded(parseInt(newVal));
                   }}
-                  className="slider"
+                  className="w-full"
                 />
               </div>
             </div>
 
             <button
               onClick={handleDownloadImage}
-              className="flex gap-2 items-center"
+              className="gradient flex gap-2 items-center justify-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -223,7 +239,6 @@ export const MainAppContainer = () => {
           </div>
         </Allotment.Pane>
       </Allotment>
-
       <div className="absolute -top-[2000px] left-0 w-full">
         <div
           id="image-wrapper"
@@ -237,15 +252,17 @@ export const MainAppContainer = () => {
           }}
         >
           <div className="flex flex-col">
-            <img
-              id="image-el"
-              src={selectedScreenshot?.assetPath}
-              alt="Image Preview"
-              className="w-full h-auto"
-              style={{
-                borderRadius: `${imgRounded - padding}px`,
-              }}
-            />
+            {selectedScreenshot && (
+              <img
+                id="image-el"
+                src={convertFileSrc(selectedScreenshot)}
+                alt="Image Preview"
+                className="w-full h-auto"
+                style={{
+                  borderRadius: `${imgRounded - padding}px`,
+                }}
+              />
+            )}
           </div>
         </div>
       </div>

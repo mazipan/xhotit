@@ -4,12 +4,13 @@ import styles from "./App.module.css";
 import RectangleSelection, { AreaCoords } from "./selection/RectangleSelection";
 import { useHandleEsc } from "./hooks/useHandleEsc";
 import { hideCursor, showCursor } from "./utils/cursor";
+import { COMMAND } from "../constant";
 
 const onSelectionEnd = async (coords: AreaCoords) => {
   try {
     console.log("coords", coords);
     hideCursor();
-    await invoke("screenshot", { coords });
+    await invoke(COMMAND.SCREENSHOT, { coords });
     showCursor();
   } catch (error) {
     console.error(error);

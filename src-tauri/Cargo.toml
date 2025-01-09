@@ -23,9 +23,10 @@ tauri-plugin-opener = "2.2.3"
 tauri-plugin-window-state = "2.2.0"
 tauri-plugin-fs = "2.2.0"
 tauri-plugin-upload = "2.2.1"
+tauri-plugin-dialog = "2.2.0"
 
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = "1.0.135"
 
 # Consider to migrate to xcap
 screenshots = "0.8.10"
@@ -34,14 +35,14 @@ cocoa = "0.26.0"
 base64 = "0.22.1"
 fs_extra = "1.3.0"
 directories = "5.0.1"
+chrono = "0.4.39"
+active-win-pos-rs = "0.9"
 
 # Maybe unused
-scrap = "0.5.0"
-repng = "0.2.2"
-core-graphics = "0.24.0"
-chrono = "0.4.39"
-reqwest = { version = "0.11.27", features = ["json"] }
-tauri-plugin-dialog = "2"
+# scrap = "0.5.0"
+# repng = "0.2.2"
+# core-graphics = "0.24.0"
+# reqwest = { version = "0.12.12", features = ["json"] }
 
 # DO NOT REMOVE!!
 # custom-protocol = ["tauri/custom-protocol"]

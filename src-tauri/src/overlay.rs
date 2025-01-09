@@ -3,7 +3,7 @@ use tauri::{
     WebviewWindowBuilder,
 };
 
-fn toggle_window(overlay: &WebviewWindow) {
+pub fn toggle_window(overlay: &WebviewWindow) {
     if overlay.is_visible().unwrap() {
         overlay.hide().unwrap();
     } else {
@@ -12,7 +12,7 @@ fn toggle_window(overlay: &WebviewWindow) {
     }
 }
 
-fn create_overlay_window(app: &AppHandle) {
+pub fn create_overlay_window(app: &AppHandle) {
     let win_builder = WebviewWindowBuilder::new(
         app,
         "overlay",
@@ -68,7 +68,12 @@ fn create_overlay_window(app: &AppHandle) {
     }
 }
 
-// FIXME: crash on click
+pub fn open_main_window(app: &AppHandle) {
+    let main: tauri::WebviewWindow = app.get_webview_window("main").unwrap();
+    main.show().unwrap();
+    main.set_focus().unwrap();
+}
+
 pub fn toggle_overlay_window(app: &AppHandle) {
     let main: tauri::WebviewWindow = app.get_webview_window("main").unwrap();
     let overlay = app.get_webview_window("overlay");
@@ -85,9 +90,4 @@ pub fn toggle_overlay_window(app: &AppHandle) {
         main.hide().unwrap();
         create_overlay_window(app);
     }
-}
-
-pub fn open_main_window(app: &AppHandle) {
-    let main: tauri::WebviewWindow = app.get_webview_window("main").unwrap();
-    main.show().unwrap();
 }

@@ -1,6 +1,8 @@
-# XhotIt
+# Xhot It
 
 Just another screenshot app
+
+![Screen Record](./screenrecord.gif)
 
 ## Recommended IDE Setup
 

@@ -21,11 +21,11 @@ export type ScreenshotItem = {
   assetPath: string;
 };
 
-export function getAssetFilename(str?: ScreenshotItem) {
+export function getAssetFilename(str?: string) {
   if (!str) {
     return '';
   }
-  const parts = str?.assetPath.split('%2F');
+  const parts = str?.split('%2F');
   return parts[parts.length - 1];
 }
 

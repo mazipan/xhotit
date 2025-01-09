@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ClassMap, GRADIENTS } from '../../helpers';
+import { ClassMap, GRADIENTS } from '../helpers';
 
 export const GradientSelect = ({
   activeGradient,

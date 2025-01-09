@@ -1,16 +1,15 @@
-use fs_extra::dir;
+use active_win_pos_rs::get_active_window;
 use screenshots::Screen;
 use serde::Deserialize;
 use std::{fs, path::PathBuf, time::Instant};
-use xcap::Window;
 
-use tauri::AppHandle;
+use tauri::{AppHandle, Emitter};
 
-use crate::{app_directory::get_app_directory, overlay::open_main_window};
-
-pub const ON_SCREENSHOT_EVENT: &str = "on_screenshot";
-// Directory target
-pub const APP_DOWNLOAD_DIR: &str = "xhotit-screenshots";
+use crate::{
+    app_directory::get_app_directory,
+    overlay::open_main_window,
+    utils::constant::{APP_DOWNLOAD_DIR, ON_GET_ACTIVE_WINDOW_EVENT, ON_SCREENSHOT_EVENT},
+};
 
 // TODO: Migrate to XCap: https://github.com/nashaofu/xcap
 pub fn capture_screen(selection: &SelectionCoords, file_path: &PathBuf) {
@@ -76,23 +75,42 @@ pub fn get_screenshot_path(app_handle: &AppHandle) -> PathBuf {
     app_dir
 }
 
+// TODO: Migrate to XCap: https://github.com/nashaofu/xcap
 pub fn capture_window(app_handle: &AppHandle) {
-    let windows = Window::all().unwrap();
+    app_handle
+        .emit(ON_GET_ACTIVE_WINDOW_EVENT, "start")
+        .unwrap();
 
-    dir::create_all("target/windows", true).unwrap();
+    // Read https://github.com/dimusic/active-win-pos-rs
+    match get_active_window() {
+        Ok(active_window) => {
+            let screenshot_path = get_screenshot_path(&app_handle);
 
-    for window in windows {
-        if window.is_minimized() || window.app_name() == "Dock" || window.app_name() == "xhotit" {
-            continue;
+            let screen = Screen::from_point(0, 0).unwrap();
+            let image = screen
+                .capture_area(
+                    active_window.position.x as i32,
+                    active_window.position.y as i32,
+                    active_window.position.width as u32,
+                    active_window.position.height as u32,
+                )
+                .unwrap();
+
+            // FIXME: save file to proper location
+            image.save(&screenshot_path).unwrap();
+
+            app_handle
+                .emit(ON_SCREENSHOT_EVENT, screenshot_path)
+                .unwrap();
+
+            open_main_window(&app_handle);
         }
+        Err(()) => {
+            app_handle
+                .emit(ON_GET_ACTIVE_WINDOW_EVENT, "error")
+                .unwrap();
 
-        println!("> Capture window app : {}", window.app_name(),);
-
-        let screenshot_path = get_screenshot_path(&app_handle);
-        let image = window.capture_image().unwrap();
-
-        image.save(screenshot_path).unwrap();
+            println!("Error occurred while getting the active window");
+        }
     }
-
-    open_main_window(app_handle)
 }

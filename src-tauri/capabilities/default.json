@@ -7,7 +7,7 @@
     "core:default",
     "opener:default",
     "window-state:default",
-    "upload:default",
+    "upload:allow-download",
     {
       "identifier": "fs:allow-download-write",
       "allow": [{ "path": "$DOWNLOAD/**" }]
@@ -19,25 +19,15 @@
     {
       "identifier": "fs:scope",
       "allow": [
-        { "path": "$APPCONFIG" },
-        { "path": "$APPCONFIG/**" },
-
-        { "path": "$APPDATA" },
-        { "path": "$APPDATA/**" },
-
-        { "path": "$APPLOCALDATA" },
-        { "path": "$APPLOCALDATA/**" },
-
-        { "path": "$APPCACHE" },
-        { "path": "$APPCACHE/**" },
-
-        { "path": "$APPLOG" },
-        { "path": "$APPLOG/**" },
-
         { "path": "$DOWNLOAD" },
         { "path": "$DOWNLOAD/**" }
       ]
 
-    }
+    },
+    "dialog:allow-ask",
+    "dialog:allow-confirm",
+    "dialog:allow-message",
+    "dialog:allow-open",
+    "dialog:allow-save"
   ]
 }

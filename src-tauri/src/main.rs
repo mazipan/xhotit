@@ -1,9 +1,12 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use app_directory::open_app_directory;
-use overlay::{stop_screenshot, toggle_overlay_window};
-use screenshot::{capture_window, get_screenshot_files, screenshot};
+use overlay::toggle_overlay_window;
+use screenshot::capture_window;
+use tauri_command::{
+    get_screenshot_files, open_app_directory, screenshot, screenshot_active_window, stop_screenshot,
+};
+
 use tauri::{
     menu::{Menu, MenuItem},
     tray::TrayIconBuilder,
@@ -12,10 +15,12 @@ use tauri::{
 mod app_directory;
 mod overlay;
 mod screenshot;
+mod tauri_command;
 mod utils;
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_upload::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_window_state::Builder::new().build())
@@ -43,19 +48,16 @@ fn main() {
                 .menu(&menu)
                 .on_menu_event(|app, event| match event.id.as_ref() {
                     "xhot" => {
-                        println!("xhot menu item was clicked");
                         toggle_overlay_window(app);
                     }
                     "xhot_active" => {
-                        println!("capture active menu item was clicked");
                         capture_window(app);
                     }
                     "quit" => {
-                        println!("quit menu item was clicked");
                         app.exit(0);
                     }
                     _ => {
-                        println!("menu item {:?} not handled", event.id);
+                        println!("Menu item {:?} not handled", event.id);
                     }
                 })
                 .build(app)?;
@@ -63,6 +65,7 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             screenshot,
+            screenshot_active_window,
             stop_screenshot,
             open_app_directory,
             get_screenshot_files,

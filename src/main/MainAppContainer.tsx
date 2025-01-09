@@ -1,6 +1,4 @@
 import { invoke } from '@tauri-apps/api/core';
-import { download } from '@tauri-apps/plugin-upload';
-import { open, BaseDirectory, writeFile } from '@tauri-apps/plugin-fs';
 import './App.css';
 
 import { Allotment } from 'allotment';
@@ -44,7 +42,7 @@ export const MainAppContainer = () => {
   const [imgRounded, setImgRounded] = useState<number>(48);
 
   return (
-    <div className="h-screen w-full">
+    <div className="relative h-screen w-full">
       <Allotment vertical={false} separator={true}>
         <Allotment.Pane maxSize={200}>
           <div
@@ -55,6 +53,7 @@ export const MainAppContainer = () => {
             <div className="flex flex-col flex-1 overflow-y-auto">
               <ScreenshotList
                 onSelectedChange={(screenshot: ScreenshotItem | undefined) => {
+                  // TODO: Get height and width of images
                   setSelectedScreenshot(screenshot);
                 }}
               />
@@ -93,24 +92,21 @@ export const MainAppContainer = () => {
           <div className="relative overflow-auto">
             {selectedScreenshot ? (
               <div
-                id="image-wrapper"
                 className={clsx(
-                  'flex flex-col justify-center items-center relative',
+                  'flex w-full flex-col justify-center items-center relative',
                   selectedGradient?.class
                 )}
                 style={{
                   padding: `${padding}px`,
                   borderRadius: `${bgRounded}px`,
-                  width: '1200px',
                   height: 'auto',
                 }}
               >
-                <div className="flex flex-row">
+                <div className="flex flex-col">
                   <img
-                    id="image-el"
                     src={selectedScreenshot?.assetPath}
-                    alt="Screenshot"
-                    className="w-full h-auto object-contain shadow-xl"
+                    alt="Image Preview"
+                    className="w-full h-auto object-contain"
                     style={{
                       borderRadius: `${imgRounded - padding}px`,
                     }}
@@ -227,6 +223,32 @@ export const MainAppContainer = () => {
           </div>
         </Allotment.Pane>
       </Allotment>
+
+      <div className="absolute -top-[2000px] left-0 w-full">
+        <div
+          id="image-wrapper"
+          className={clsx(
+            'flex w-full flex-col justify-center items-center relative',
+            selectedGradient?.class
+          )}
+          style={{
+            padding: `${padding}px`,
+            borderRadius: `${bgRounded}px`,
+          }}
+        >
+          <div className="flex flex-col">
+            <img
+              id="image-el"
+              src={selectedScreenshot?.assetPath}
+              alt="Image Preview"
+              className="w-full h-auto"
+              style={{
+                borderRadius: `${imgRounded - padding}px`,
+              }}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

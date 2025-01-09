@@ -4,19 +4,16 @@ use serde::Deserialize;
 use std::{fs, path::PathBuf, time::Instant};
 use xcap::Window;
 
-use tauri::{command, AppHandle, Emitter, Manager};
+use tauri::AppHandle;
 
-use crate::{
-    app_directory::{get_app_directory, list_images_in_directory_sorted},
-    overlay::toggle_overlay_window,
-};
+use crate::{app_directory::get_app_directory, overlay::open_main_window};
 
 pub const ON_SCREENSHOT_EVENT: &str = "on_screenshot";
-
 // Directory target
 pub const APP_DOWNLOAD_DIR: &str = "xhotit-screenshots";
 
-fn capture_screen(selection: &SelectionCoords, file_path: &PathBuf) {
+// TODO: Migrate to XCap: https://github.com/nashaofu/xcap
+pub fn capture_screen(selection: &SelectionCoords, file_path: &PathBuf) {
     let start = Instant::now();
     let screen = Screen::from_point(0, 0).unwrap();
     println!("capturer {screen:?}");
@@ -58,7 +55,7 @@ pub struct SelectionCoords {
     pub target: (i32, i32),
 }
 
-fn get_screenshot_path(app_handle: &AppHandle) -> PathBuf {
+pub fn get_screenshot_path(app_handle: &AppHandle) -> PathBuf {
     let mut app_dir = get_app_directory(app_handle, Some(APP_DOWNLOAD_DIR.to_string())).unwrap();
 
     if !app_dir.exists() {
@@ -80,7 +77,6 @@ fn get_screenshot_path(app_handle: &AppHandle) -> PathBuf {
 }
 
 pub fn capture_window(app_handle: &AppHandle) {
-    let start = Instant::now();
     let windows = Window::all().unwrap();
 
     dir::create_all("target/windows", true).unwrap();
@@ -90,17 +86,7 @@ pub fn capture_window(app_handle: &AppHandle) {
             continue;
         }
 
-        println!(
-            "Window:\n id: {}\n title: {}\n app_name: {}\n pid: {}\n monitor: {:?}\n position: {:?}\n size {:?}\n state {:?}\n",
-            window.id(),
-            window.title(),
-            window.app_name(),
-            window.pid(),
-            window.current_monitor().name(),
-            (window.x(), window.y(), window.z()),
-            (window.width(), window.height()),
-            (window.is_minimized(), window.is_maximized())
-        );
+        println!("> Capture window app : {}", window.app_name(),);
 
         let screenshot_path = get_screenshot_path(&app_handle);
         let image = window.capture_image().unwrap();
@@ -108,31 +94,5 @@ pub fn capture_window(app_handle: &AppHandle) {
         image.save(screenshot_path).unwrap();
     }
 
-    println!("运行耗时: {:?}", start.elapsed());
-}
-
-#[command]
-pub fn screenshot(app_handle: AppHandle, coords: SelectionCoords) {
-    let overlay = app_handle.get_webview_window("overlay").unwrap();
-    if !overlay.is_visible().unwrap() {
-        return;
-    }
-
-    let screenshot_path = get_screenshot_path(&app_handle);
-    println!("app_dir: {:?}", screenshot_path);
-
-    println!("selection coords: {:?}", coords);
-    println!("screenshot");
-    capture_screen(&coords, &screenshot_path);
-
-    app_handle
-        .emit(ON_SCREENSHOT_EVENT, screenshot_path)
-        .unwrap();
-
-    toggle_overlay_window(&app_handle);
-}
-
-#[command]
-pub fn get_screenshot_files(app: AppHandle) -> Option<Vec<String>> {
-    list_images_in_directory_sorted(&app, Some(APP_DOWNLOAD_DIR.to_string()))
+    open_main_window(app_handle)
 }

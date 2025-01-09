@@ -1,6 +1,18 @@
-import { BaseDirectory, writeFile } from '@tauri-apps/plugin-fs';
-// @ts-ignore
-import domtoimage from 'dom-to-image-more';
+import { writeFile } from '@tauri-apps/plugin-fs';
+import { save, message } from '@tauri-apps/plugin-dialog';
+import { downloadDir } from '@tauri-apps/api/path';
+
+import { domToPng } from 'modern-screenshot';
+import { customAlphabet } from 'nanoid';
+
+export function getRandomId(size = 5) {
+  const nanoid = customAlphabet(
+    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+    size
+  );
+
+  return nanoid(size);
+}
 
 export const APP_DOWNLOAD_DIR = 'xhotit-screenshots';
 
@@ -116,108 +128,77 @@ export const GRADIENTS: ClassMap[] = [
   },
 ];
 
-/**
- * @see https://dev.to/nombrekeff/download-file-from-blob-21ho
- * @param blob <Blob>
- * @param filename <string>
- */
-export function downloadFromHref(href: string, filename: string) {
-  fetch(href, {
-    headers: new Headers({
-      Origin: location.origin,
-    }),
-    mode: 'cors',
-  })
-    .then((response) => response.blob())
-    .then((blob) => {
-      let blobUrl = window.URL.createObjectURL(blob);
-      let link = document.createElement('a');
-      link.setAttribute('download', filename);
-      link.href = blobUrl;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(blobUrl);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-
-  // // Create a link element
-  // const link = document.createElement('a')
-
-  // link.href = href
-  // link.download = filename
-  // link.setAttribute('data-filename', filename)
-  // link.style.display = 'none'
-
-  // // Append link to the body
-  // document.body.appendChild(link)
-
-  // // Dispatch click event on the link
-  // // This is necessary as link.click() does not work on the latest firefox
-  // link.dispatchEvent(
-  //   new MouseEvent('click', {
-  //     bubbles: true,
-  //     cancelable: true,
-  //     view: window,
-  //   }),
-  // )
-
-  // // Remove link from body
-  // document.body.removeChild(link)
-}
-
-export function downloadImageFromDom(elementWrapperId: string, elementImageId: string) {
+export async function downloadImageFromDom(
+  elementWrapperId: string,
+  elementImageId: string
+) {
   const domWrapper = document.querySelector(`#${elementWrapperId}`);
   const domImage = document.querySelector(`#${elementImageId}`);
 
-  if (domImage) {
-    // @ts-ignore
-    domImage.style.width = "1200px";
-  }
+  const timestamp = new Date().toISOString().split('T')[0];
+  const filename = `img-${timestamp}-${getRandomId(5)}.png`;
+  const defaultPath = await downloadDir();
 
-  if (domWrapper) {
-    const timestamp = new Date()
-      .toISOString()
-      .replace(/:/, '-')
-      .replace('T', '_')
-      .replace('Z', '')
-      .trim();
+  const selectedPath = await save({
+    defaultPath: `${defaultPath}/${APP_DOWNLOAD_DIR}/${filename}`,
+    filters: [
+      {
+        name: filename,
+        extensions: ['png'],
+      },
+    ],
+  });
 
-    // eslint-disable-next-line
-    // @ts-ignore
-    domtoimage
-      .toPng(domWrapper)
+  if (selectedPath && domWrapper) {
+    if (domImage) {
+      // @ts-ignore
+      // domImage.style.width = '1200px';
+      // @ts-ignore
+      // domImage.style.height = '1200px';
+    }
+
+    domToPng(domWrapper)
       .then((dataUrl: string) => {
-        const filename = `xhot-editted-${timestamp}.png`;
-
         fetch(dataUrl, {
           headers: new Headers({
             Origin: location.origin,
           }),
           mode: 'cors',
         })
-          .then((response) => response.arrayBuffer())
-          .then(async (buffer) => {
-            console.log("Byte length", buffer.byteLength)
-            const contents = [...new Uint8Array(buffer, 0, buffer.byteLength)];
+          .then((response) => response.blob())
+          .then(async (blob) => {
+            const contents = new Uint8Array(await blob.arrayBuffer());
 
-            await writeFile(`${filename}`, contents, {
-              baseDir: BaseDirectory.Download,
+            await writeFile(`${selectedPath}`, contents, {
+              // baseDir: BaseDirectory.Download,
+            });
+
+            await message(`Image has been saved in ${selectedPath}`, {
+              title: 'Success Info',
+              kind: 'info',
             });
 
             if (domImage) {
               // @ts-ignore
               // domImage.style.removeProperty('width');
+              // @ts-ignore
+              // domImage.style.removeProperty('height');
             }
           })
-          .catch((error) => {
+          .catch(async (error) => {
             console.error(error);
+            await message('Failed when try to save file!', {
+              title: 'Error Info',
+              kind: 'error',
+            });
           });
       })
-      .catch((error: Error) => {
+      .catch(async (error: Error) => {
         console.error('Opps, something went wrong!', error);
+        await message('Something went wrong when trying to convert to image!', {
+          title: 'Error Info',
+          kind: 'error',
+        });
       });
   }
 }

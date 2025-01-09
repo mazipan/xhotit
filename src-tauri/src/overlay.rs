@@ -1,5 +1,5 @@
 use tauri::{
-    command, AppHandle, Manager, PhysicalPosition, TitleBarStyle, WebviewUrl, WebviewWindow,
+    AppHandle, Manager, PhysicalPosition, TitleBarStyle, WebviewUrl, WebviewWindow,
     WebviewWindowBuilder,
 };
 
@@ -68,15 +68,11 @@ fn create_overlay_window(app: &AppHandle) {
     }
 }
 
-#[command]
-pub fn stop_screenshot(app_handle: AppHandle) {
-    toggle_overlay_window(&app_handle);
-}
-
 // FIXME: crash on click
 pub fn toggle_overlay_window(app: &AppHandle) {
     let main: tauri::WebviewWindow = app.get_webview_window("main").unwrap();
     let overlay = app.get_webview_window("overlay");
+
     if let Some(overlay) = overlay {
         if overlay.is_visible().unwrap() {
             main.show().unwrap();
@@ -89,4 +85,9 @@ pub fn toggle_overlay_window(app: &AppHandle) {
         main.hide().unwrap();
         create_overlay_window(app);
     }
+}
+
+pub fn open_main_window(app: &AppHandle) {
+    let main: tauri::WebviewWindow = app.get_webview_window("main").unwrap();
+    main.show().unwrap();
 }

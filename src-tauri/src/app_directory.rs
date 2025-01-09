@@ -1,6 +1,6 @@
 use directories::UserDirs;
-use std::{fs, path::PathBuf, process::Command as ProcessCommand, time::SystemTime};
-use tauri::{command, AppHandle};
+use std::{fs, path::PathBuf, time::SystemTime};
+use tauri::AppHandle;
 
 pub fn list_images_in_directory_sorted(
     app: &AppHandle,
@@ -60,7 +60,7 @@ pub fn list_images_in_directory_sorted(
     }
 }
 
-pub fn get_app_directory(app: &AppHandle, subdirectory: Option<String>) -> Option<PathBuf> {
+pub fn get_app_directory(_app: &AppHandle, subdirectory: Option<String>) -> Option<PathBuf> {
     let user_dirs = UserDirs::new().expect("Failed to get user directories");
     let mut path = user_dirs.download_dir().unwrap().to_path_buf();
 
@@ -69,30 +69,4 @@ pub fn get_app_directory(app: &AppHandle, subdirectory: Option<String>) -> Optio
     }
 
     Some(path)
-}
-
-#[command]
-pub fn open_app_directory(app: AppHandle, subdirectory: Option<String>) {
-    let path: PathBuf =
-        get_app_directory(&app, subdirectory).expect("Error: can't get app directory");
-    if path.is_dir() {
-        // Open the directory using the system's default file explorer
-        #[cfg(target_os = "windows")]
-        ProcessCommand::new("explorer")
-            .arg(path)
-            .spawn()
-            .expect("ERROR: Failed to open directory");
-
-        #[cfg(target_os = "macos")]
-        ProcessCommand::new("open")
-            .arg(path)
-            .spawn()
-            .expect("ERROR: Failed to open directory");
-
-        #[cfg(target_os = "linux")]
-        ProcessCommand::new("xdg-open")
-            .arg(path)
-            .spawn()
-            .expect("ERROR: Failed to open directory");
-    }
 }

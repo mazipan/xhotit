@@ -1,14 +1,15 @@
-# Xhot It
+# 📸 Xhot It
 
-Just another screenshot app
+Screenshot App: Experimental. Powered by Tauri v2.
 
 ![Screen Record](./screenrecord.gif)
 
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
-
 ## Development
+
+Prerequisites
+
++ `bun`: https://bun.sh/docs/cli/install
++ `rust`: https://www.rust-lang.org/tools/install
 
 Install deps
 
@@ -24,4 +25,4 @@ bun run tdev
 
 ## Credits
 
-+ Most of code coming from [dimaportenko/code-helper](https://github.com/dimaportenko/code-helper)
++ Most of code coming from [dimaportenko/code-helper](https://github.com/dimaportenko/code-helper) but upgraded to Tauri v2, remove unnecessary feature, add background backdrop feature.

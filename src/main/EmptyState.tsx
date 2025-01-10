@@ -26,25 +26,40 @@ export function EmptyState({
   };
 
   return (
-    <div className="space-y-4 p-4 py-6">
-      <div
-        className="flex p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
-        role="alert"
-      >
+    <div className="h-screen w-full flex flex-col justify-center items-center gap-4 p-4 py-6">
+      <div className="mb-8 flex flex-col gap-2 items-center">
+        <h1 className="text-2xl font-semibold">
+          Welcome to{' '}
+          <span className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 inline-block text-transparent bg-clip-text">
+            Xhot It
+          </span>
+        </h1>
+
+        <p>Just another screen capture app</p>
+
         <svg
-          className="flex-shrink-0 inline w-4 h-4 me-3"
-          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          viewBox="0 0 20 20"
+          width="350"
+          height="387"
+          fill="none"
+          viewBox="0 0 350 387"
+          className='size-10'
         >
-          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          <path
+            stroke="#FACC15"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="10"
+            d="m172.332 99.399-5.082 17.789-5.082-17.79a28.13 28.13 0 0 0-19.317-19.315L125.062 75l17.789-5.082A28.13 28.13 0 0 0 162.168 50.6l5.082-17.788 5.082 17.788a28.13 28.13 0 0 0 19.317 19.317L209.438 75l-17.789 5.082A28.13 28.13 0 0 0 172.332 99.4M225.118 54.466l-1.618 6.471-1.618-6.471a21.09 21.09 0 0 0-15.348-15.348l-6.472-1.618 6.472-1.618a21.09 21.09 0 0 0 15.348-15.348l1.618-6.471 1.618 6.471a21.09 21.09 0 0 0 15.348 15.348l6.472 1.618-6.472 1.618a21.09 21.09 0 0 0-15.348 15.348M216.589 128.545l-2.464 7.393-2.464-7.393a14.06 14.06 0 0 0-8.894-8.893l-7.392-2.464 7.392-2.465a14.06 14.06 0 0 0 8.894-8.893l2.464-7.392 2.464 7.392a14.06 14.06 0 0 0 8.894 8.893l7.392 2.465-7.392 2.464a14.06 14.06 0 0 0-8.894 8.893"
+          ></path>
+          <path
+            stroke="#FACC15"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="30"
+            d="M109.375 91.688H87.5c-18.122 0-32.812 14.69-32.812 32.812v21.875m185.937-54.687H262.5c18.122 0 32.812 14.69 32.812 32.812v21.875m0 131.25V299.5c0 18.122-14.69 32.812-32.812 32.812h-21.875m-131.25 0H87.5c-18.122 0-32.812-14.69-32.812-32.812v-21.875M218.75 212c0 24.162-19.588 43.75-43.75 43.75s-43.75-19.588-43.75-43.75 19.588-43.75 43.75-43.75 43.75 19.588 43.75 43.75"
+          ></path>
         </svg>
-        <span className="sr-only">Warning</span>
-        <div>
-          There is no image to shown in this panel. Let's capture new screenshot
-          then the image will be previewed here.
-        </div>
       </div>
 
       <div className="flex flex-wrap gap-4 items-center">

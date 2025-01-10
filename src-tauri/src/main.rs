@@ -3,16 +3,16 @@
 
 use app_command::{
     get_screenshot_files, open_app_directory, open_overlay, screenshot, screenshot_active_window,
-    screenshot_monitor, stop_screenshot,
+    screenshot_monitor, stop_screenshot, reset_app,
 };
 
-use overlay::toggle_overlay_window;
+use overlay::{reopen_main_window, toggle_overlay_window};
 use screenshot::{capture_monitor, capture_window};
 
 use tauri::{
     image::Image,
-    menu::{IconMenuItem, Menu},
-    tray::TrayIconBuilder,
+    menu::{IconMenuItem, MenuBuilder, MenuItem},
+    tray::TrayIconBuilder
 };
 use tauri_plugin_opener::OpenerExt;
 
@@ -63,40 +63,48 @@ fn main() {
                 Some("CmdOrCtrl+Shift+3"),
             )?;
 
-            let report_bug_icon = Image::from_path("./icons/menu/bug-ant.png");
-            let report_bug_i = IconMenuItem::with_id(
+            let reopen_i = MenuItem::with_id(
+                app,
+                "reopen_app",
+                "Reopen Xhot It",
+                true,
+                None::<&str>,
+            )?;
+
+            let report_bug_i = MenuItem::with_id(
                 app,
                 "report_bug",
                 "Report a Bug",
                 true,
-                report_bug_icon.ok(),
                 None::<&str>,
             )?;
 
-            let quit_icon = Image::from_path("./icons/menu/arrow-left-start-on-rectangle.png");
-            let quit_i = IconMenuItem::with_id(
+            let quit_i = MenuItem::with_id(
                 app,
                 "quit",
                 "Quit",
                 true,
-                quit_icon.ok(),
                 Some("CmdOrCtrl+Q"),
             )?;
 
-            let menu = Menu::with_items(
-                app,
-                &[
+            let menu_builder =
+                MenuBuilder::new(app)
+                .items(&[
                     &capture_area_i,
                     &capture_active_i,
                     &capture_screen_i,
+                ])
+                .separator()
+                .items(&[
+                    &reopen_i,
                     &report_bug_i,
                     &quit_i,
-                ],
-            )?;
+                ])
+                .build()?;
 
             let _tray = TrayIconBuilder::new()
                 .icon(app.default_window_icon().unwrap().clone())
-                .menu(&menu)
+                .menu(&menu_builder)
                 .on_menu_event(|app, event| match event.id.as_ref() {
                     "capture_area" => {
                         toggle_overlay_window(app);
@@ -106,6 +114,9 @@ fn main() {
                     }
                     "capture_screen" => {
                         capture_monitor(app);
+                    }
+                    "reopen_app" => {
+                        reopen_main_window(app);
                     }
                     "report_bug" => {
                         let opener = app.opener();
@@ -130,6 +141,7 @@ fn main() {
             stop_screenshot,
             open_app_directory,
             get_screenshot_files,
+            reset_app,
         ])
         .run(tauri::generate_context!())
         .expect("ERROR: error while running tauri application");

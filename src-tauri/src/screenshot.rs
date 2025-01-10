@@ -7,8 +7,10 @@ use tauri::{AppHandle, Emitter};
 
 use crate::{
     app_directory::get_app_directory,
+    constant::{
+        APP_DOWNLOAD_DIR, ON_CAPTURE_MONITOR_EVENT, ON_GET_ACTIVE_WINDOW_EVENT, ON_SCREENSHOT_EVENT,
+    },
     overlay::open_main_window,
-    utils::constant::{APP_DOWNLOAD_DIR, ON_GET_ACTIVE_WINDOW_EVENT, ON_SCREENSHOT_EVENT},
 };
 
 // TODO: Migrate to XCap: https://github.com/nashaofu/xcap
@@ -43,7 +45,7 @@ pub fn capture_screen(selection: &SelectionCoords, file_path: &PathBuf) {
     }
 
     let image = screen.capture_area(x, y, width, height).unwrap();
-    // FIXME: save file to proper location
+
     image.save(file_path).unwrap();
     println!("Runtime: {:?}", start.elapsed());
 }
@@ -96,7 +98,6 @@ pub fn capture_window(app_handle: &AppHandle) {
                 )
                 .unwrap();
 
-            // FIXME: save file to proper location
             image.save(&screenshot_path).unwrap();
 
             app_handle
@@ -113,4 +114,24 @@ pub fn capture_window(app_handle: &AppHandle) {
             println!("Error occurred while getting the active window");
         }
     }
+}
+
+// TODO: Migrate to XCap: https://github.com/nashaofu/xcap
+pub fn capture_monitor(app_handle: &AppHandle) {
+    app_handle.emit(ON_CAPTURE_MONITOR_EVENT, "start").unwrap();
+
+    let screenshot_path = get_screenshot_path(&app_handle);
+
+    let screen = Screen::from_point(0, 0).unwrap();
+    let image = screen
+        .capture()
+        .unwrap();
+
+    image.save(&screenshot_path).unwrap();
+
+    app_handle
+        .emit(ON_SCREENSHOT_EVENT, screenshot_path)
+        .unwrap();
+
+    open_main_window(&app_handle);
 }

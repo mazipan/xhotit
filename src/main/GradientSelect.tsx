@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ClassMap, GRADIENTS } from '../helpers';
+import { ClassMap, GRADIENTS } from '../gradients';
 
 export const GradientSelect = ({
   activeGradient,
@@ -14,7 +14,7 @@ export const GradientSelect = ({
         <div
           key={gradient.id}
           className={clsx(
-            'h-10 w-10 border rounded-full cursor-pointer',
+            'h-6 w-6 border rounded-full cursor-pointer',
             gradient.class,
             activeGradient === gradient.id
               ? 'border-2 border-gray-900 dark:border-gray-100'

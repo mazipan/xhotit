@@ -1,6 +1,6 @@
 # 📸 Xhot It
 
-Screenshot App: Experimental. Powered by [Tauri v2](https://v2.tauri.app/).
+Xhot it (read as "shot it") is just another screenshot app in your desktop: an experimental application. powered by [Tauri v2](https://v2.tauri.app/).
 
 ![Screenshot](./screenshot.png)
 

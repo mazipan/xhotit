@@ -1,24 +1,26 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use overlay::toggle_overlay_window;
-use screenshot::capture_window;
-use tauri_command::{
+use app_command::{
     get_screenshot_files, open_app_directory, open_overlay, screenshot, screenshot_active_window,
-    stop_screenshot,
+    screenshot_monitor, stop_screenshot,
 };
 
+use overlay::toggle_overlay_window;
+use screenshot::{capture_monitor, capture_window};
+
 use tauri::{
-    menu::{Menu, MenuItem},
+    image::Image,
+    menu::{IconMenuItem, Menu},
     tray::TrayIconBuilder,
 };
 use tauri_plugin_opener::OpenerExt;
 
+mod app_command;
 mod app_directory;
+mod constant;
 mod overlay;
 mod screenshot;
-mod tauri_command;
-mod utils;
 
 fn main() {
     tauri::Builder::default()
@@ -31,48 +33,83 @@ fn main() {
             #[cfg(target_os = "macos")]
             app.set_activation_policy(tauri::ActivationPolicy::Accessory);
 
-            let capture_active_i = MenuItem::with_id(
+            let capture_area_icon = Image::from_path("./icons/menu/viewfinder-circle.png");
+            let capture_area_i = IconMenuItem::with_id(
                 app,
-                "xhot_active",
-                "Xhot Active Window",
+                "capture_area",
+                "Capture Area",
                 true,
-                Some("CmdOrCtrl+Shift+A"),
+                capture_area_icon.ok(),
+                Some("CmdOrCtrl+Shift+1"),
             )?;
 
-            let capture_i =
-                MenuItem::with_id(app, "xhot", "Xhot", true, Some("CmdOrCtrl+Shift+S"))?;
+            let capture_active_icon = Image::from_path("./icons/menu/camera.png");
+            let capture_active_i = IconMenuItem::with_id(
+                app,
+                "capture_active",
+                "Capture Active Window",
+                true,
+                capture_active_icon.ok(),
+                Some("CmdOrCtrl+Shift+2"),
+            )?;
 
-            let report_bug_i = MenuItem::with_id(
+            let capture_screen_icon = Image::from_path("./icons/menu/computer-desktop.png");
+            let capture_screen_i = IconMenuItem::with_id(
+                app,
+                "capture_screen",
+                "Capture Screen",
+                true,
+                capture_screen_icon.ok(),
+                Some("CmdOrCtrl+Shift+3"),
+            )?;
+
+            let report_bug_icon = Image::from_path("./icons/menu/bug-ant.png");
+            let report_bug_i = IconMenuItem::with_id(
                 app,
                 "report_bug",
                 "Report a Bug",
                 true,
-                Some("CmdOrCtrl+Shift+R"),
+                report_bug_icon.ok(),
+                None::<&str>,
             )?;
 
-            let quit_i = MenuItem::with_id(app, "quit", "Quit", true, Some("Q"))?;
+            let quit_icon = Image::from_path("./icons/menu/arrow-left-start-on-rectangle.png");
+            let quit_i = IconMenuItem::with_id(
+                app,
+                "quit",
+                "Quit",
+                true,
+                quit_icon.ok(),
+                Some("CmdOrCtrl+Q"),
+            )?;
 
             let menu = Menu::with_items(
                 app,
-                &[&capture_active_i, &capture_i, &report_bug_i, &quit_i],
+                &[
+                    &capture_area_i,
+                    &capture_active_i,
+                    &capture_screen_i,
+                    &report_bug_i,
+                    &quit_i,
+                ],
             )?;
 
             let _tray = TrayIconBuilder::new()
                 .icon(app.default_window_icon().unwrap().clone())
                 .menu(&menu)
                 .on_menu_event(|app, event| match event.id.as_ref() {
-                    "xhot" => {
+                    "capture_area" => {
                         toggle_overlay_window(app);
                     }
-                    "xhot_active" => {
+                    "capture_active" => {
                         capture_window(app);
+                    }
+                    "capture_screen" => {
+                        capture_monitor(app);
                     }
                     "report_bug" => {
                         let opener = app.opener();
-                        let _ = opener.open_url(
-                            "https://github.com/mazipan/xhotit",
-                            None::<&str>,
-                        );
+                        let _ = opener.open_url("https://github.com/mazipan/xhotit", None::<&str>);
                     }
                     "quit" => {
                         app.exit(0);
@@ -88,6 +125,7 @@ fn main() {
             // Should be same with "src/constant.ts"
             screenshot,
             screenshot_active_window,
+            screenshot_monitor,
             open_overlay,
             stop_screenshot,
             open_app_directory,

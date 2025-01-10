@@ -18,11 +18,7 @@
     },
     {
       "identifier": "fs:scope",
-      "allow": [
-        { "path": "$DOWNLOAD" },
-        { "path": "$DOWNLOAD/**" }
-      ]
-
+      "allow": [{ "path": "$DOWNLOAD" }, { "path": "$DOWNLOAD/**" }]
     },
     "dialog:allow-ask",
     "dialog:allow-confirm",

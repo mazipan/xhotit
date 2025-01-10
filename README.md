@@ -1,12 +1,21 @@
 # 📸 Xhot It
 
-Screenshot App: Experimental. Powered by Tauri v2.
+Screenshot App: Experimental. Powered by [Tauri v2](https://v2.tauri.app/).
+
+![Screenshot](./screenshot.png)
 
 ![Screen Record](./screenrecord.gif)
 
+## Features
+
+- **🖼️ Capture Area**: capture screenshot using free selection
+- **🪟 Capture Active Window**: capture the active window only
+- **🖥️ Capture Screen**: capture the whole screen
+- **🎨 Backdrop Background**: setting backdrop background
+
 ## Enable screen recording in Mac
 
-https://support.apple.com/en-ca/guide/mac-help/mchld6aa7d23/mac
+▶️ https://support.apple.com/en-ca/guide/mac-help/mchld6aa7d23/mac
 
 ## Development
 
@@ -29,4 +38,6 @@ bun run tdev
 
 ## Credits
 
-+ Most of code coming from [dimaportenko/code-helper](https://github.com/dimaportenko/code-helper) but upgraded to Tauri v2, remove unnecessary feature, add background backdrop feature.
++ [dimaportenko/code-helper](https://github.com/dimaportenko/code-helper) for the base code
++ [screenshots](https://crates.io/crates/screenshots) and [xcap](https://crates.io/crates/xcap) for capturing screen
++ [active-win-pos-rs](https://crates.io/crates/active-win-pos-rs/) to detect active window position

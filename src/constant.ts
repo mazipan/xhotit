@@ -12,3 +12,5 @@ export const EVENT = {
   ON_SCREENSHOT: "on_screenshot",
   ON_GET_ACTIVE_WINDOW: "on_get_active_window"
 } as const
+
+export const APP_DOWNLOAD_DIR = 'xhotit-screenshots';

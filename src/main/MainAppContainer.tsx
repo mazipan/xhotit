@@ -37,6 +37,21 @@ export const MainAppContainer = () => {
     };
   }, []);
 
+
+  useEffect(() => {
+    let unsubscribe = () => {};
+
+    listen(EVENT.ON_REOPEN_APP_EVENT, (res) => {
+      if (res.payload === 'start') {
+        setSelectedScreenshot(undefined);
+      }
+    }).then((fn) => (unsubscribe = fn));
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   useEffect(() => {
     let unsubscribe = () => {};
 
@@ -76,29 +91,31 @@ export const MainAppContainer = () => {
           />
         )}
 
-        <Allotment.Pane minSize={200} maxSize={400} preferredSize={200}>
-          <SettingPanel
-            gradient={selectedGradient}
-            onClickNewGradient={(newGradient) => {
-              setSelectedGradient(newGradient);
-            }}
-            padding={padding}
-            onChangePadding={(e) => {
-              const newVal = e.target.value;
-              setPadding(parseInt(newVal));
-            }}
-            bgRounded={bgRounded}
-            onChangeBgRounded={(e) => {
-              const newVal = e.target.value;
-              setBgRounded(parseInt(newVal));
-            }}
-            imgRounded={imgRounded}
-            onChangeImgRounded={(e) => {
-              const newVal = e.target.value;
-              setImgRounded(parseInt(newVal));
-            }}
-          />
-        </Allotment.Pane>
+        {selectedScreenshot && (
+          <Allotment.Pane minSize={200} maxSize={400} preferredSize={200}>
+            <SettingPanel
+              gradient={selectedGradient}
+              onClickNewGradient={(newGradient) => {
+                setSelectedGradient(newGradient);
+              }}
+              padding={padding}
+              onChangePadding={(e) => {
+                const newVal = e.target.value;
+                setPadding(parseInt(newVal));
+              }}
+              bgRounded={bgRounded}
+              onChangeBgRounded={(e) => {
+                const newVal = e.target.value;
+                setBgRounded(parseInt(newVal));
+              }}
+              imgRounded={imgRounded}
+              onChangeImgRounded={(e) => {
+                const newVal = e.target.value;
+                setImgRounded(parseInt(newVal));
+              }}
+            />
+          </Allotment.Pane>
+        )}
       </Allotment>
 
       <GhostPanel

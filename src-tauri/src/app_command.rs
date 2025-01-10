@@ -2,7 +2,7 @@ use std::{path::PathBuf, process::Command as ProcessCommand};
 use tauri::{command, AppHandle, Emitter, Manager};
 
 use crate::{
-    app_directory::{get_app_directory, list_images_in_directory_sorted}, constant::{APP_DOWNLOAD_DIR, ON_SCREENSHOT_EVENT}, overlay::toggle_overlay_window, screenshot::{capture_monitor, capture_screen, capture_window, get_screenshot_path, SelectionCoords}
+    app_directory::{get_app_directory, list_images_in_directory_sorted}, constant::{APP_DOWNLOAD_DIR, ON_SCREENSHOT_EVENT}, overlay::{reopen_main_window, toggle_overlay_window}, screenshot::{capture_monitor, capture_screen, capture_window, get_screenshot_path, SelectionCoords}
 };
 
 /**
@@ -56,6 +56,14 @@ pub fn screenshot_active_window(app_handle: AppHandle) {
 #[command]
 pub fn screenshot_monitor(app_handle: AppHandle) {
     capture_monitor(&app_handle)
+}
+
+/**
+ * When click reopen from menu item
+ */
+#[command]
+pub fn reset_app(app_handle: AppHandle) {
+    reopen_main_window(&app_handle)
 }
 
 /**

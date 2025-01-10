@@ -1,7 +1,9 @@
 use tauri::{
-    AppHandle, Manager, PhysicalPosition, TitleBarStyle, WebviewUrl, WebviewWindow,
+    AppHandle, Emitter, Manager, PhysicalPosition, TitleBarStyle, WebviewUrl, WebviewWindow,
     WebviewWindowBuilder,
 };
+
+use crate::constant::ON_REOPEN_APP_EVENT;
 
 pub fn toggle_window(overlay: &WebviewWindow) {
     if overlay.is_visible().unwrap() {
@@ -72,6 +74,11 @@ pub fn open_main_window(app: &AppHandle) {
     let main: tauri::WebviewWindow = app.get_webview_window("main").unwrap();
     main.show().unwrap();
     main.set_focus().unwrap();
+}
+
+pub fn reopen_main_window(app_handle: &AppHandle) {
+    open_main_window(app_handle);
+    app_handle.emit(ON_REOPEN_APP_EVENT, "start").unwrap();
 }
 
 pub fn toggle_overlay_window(app: &AppHandle) {

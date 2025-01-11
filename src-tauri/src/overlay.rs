@@ -1,7 +1,8 @@
 use tauri::{
-    AppHandle, Emitter, Manager, PhysicalPosition, TitleBarStyle, WebviewUrl, WebviewWindow,
-    WebviewWindowBuilder,
+    AppHandle, Emitter, Manager, PhysicalPosition, WebviewUrl, WebviewWindow, WebviewWindowBuilder,
 };
+#[cfg(target_os = "macos")]
+use tauri::TitleBarStyle;
 
 use crate::constant::ON_REOPEN_APP_EVENT;
 

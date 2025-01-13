@@ -42,8 +42,8 @@ jobs:
               ## 📦 Executable Assets
 
               - **🍏 Mac**:
-                - Silicon: ▶️ \`Xhot.It_[version]_aarch64.dmg\`
-                - Intel  : ▶️ \`Xhot.It_[version]_x64.dmg\`
+                - Silicon: ▶️ \`Xhot.It_aarch64.app.tar.gz\`
+                - Intel  : ▶️ \`Xhot.It_x64.app.tar.gz\`
               - **🪟 Windows**:
                 - ▶️ \`Xhot.It_[version]_x64_en-US.msi\`
                 - ▶️ \`Xhot.It_[version]_x64-setup.exe\`
@@ -68,7 +68,7 @@ jobs:
           - platform: "macos-latest" # for Arm based macs (M1 and above).
             args: "--target aarch64-apple-darwin --bundles app"
           - platform: "macos-latest" # for Intel based macs.
-            args: "--target x86_64-apple-darwin"
+            args: "--target x86_64-apple-darwin --bundles app"
           - platform: "ubuntu-22.04" # for Tauri v1 you could replace this with ubuntu-20.04.
             args: ""
           - platform: "windows-latest"

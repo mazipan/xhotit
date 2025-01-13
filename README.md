@@ -41,3 +41,17 @@ bun run tdev
 + [dimaportenko/code-helper](https://github.com/dimaportenko/code-helper) for the base code
 + [screenshots](https://crates.io/crates/screenshots) and [xcap](https://crates.io/crates/xcap) for capturing screen
 + [active-win-pos-rs](https://crates.io/crates/active-win-pos-rs/) to detect active window position
+
+
+## Contributors
+
+Thanks goes to these wonderful people!
+
+[![Contributors](https://contrib.rocks/image?repo=mazipan/xhotit)](https://github.com/mazipan/xhotit/graphs/contributors)
+
+## Support Me
+
+- 👉 🇮🇩 [Trakteer](https://trakteer.id/mazipan/tip?utm_source=github-mazipan)
+- 👉 🌍 [BuyMeACoffe](https://www.buymeacoffee.com/mazipan?utm_source=github-mazipan)
+- 👉 🌍 [Paypal](https://www.paypal.me/mazipan?utm_source=github-mazipan)
+- 👉 🌍 [Ko-Fi](https://ko-fi.com/mazipan?utm_source=github-mazipan)

@@ -23,6 +23,11 @@ use tauri::{
 use tauri_plugin_opener::OpenerExt;
 
 fn main() {
+    // Based on issue: https://github.com/tauri-apps/tauri/issues/7063
+    // https://github.com/tauri-apps/fix-path-env-rs
+    #[cfg(not(target_os="windows"))]
+    let _ = fix_path_env::fix();
+
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())

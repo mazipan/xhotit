@@ -30,13 +30,28 @@ jobs:
         with:
           script: |
             const { data } = await github.rest.repos.createRelease({
+              draft: true,
+              prerelease: false,
+              generate_release_notes: true,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `app-v${process.env.PACKAGE_VERSION}`,
-              name: `Xhot It v${process.env.PACKAGE_VERSION}`,
-              body: 'Take a look at the assets to download and install this app.',
-              draft: true,
-              prerelease: false
+              tag_name: `release-v${process.env.PACKAGE_VERSION}`,
+              name: `xhotit.v${process.env.PACKAGE_VERSION}`,
+              body: `Take a look at the assets to download and install this app.
+
+              Executable Assets:
+
+              - Mac:
+                - Silicon/M Series: \`Xhot.It_${process.env.PACKAGE_VERSION}_aarch64.dmg\`
+                - Intel: \`Xhot.It_${process.env.PACKAGE_VERSION}_x64.dmg\`
+              - Windows:
+                - \`Xhot.It_${process.env.PACKAGE_VERSION}_x64_en-US.msi\`
+                - \`Xhot.It_${process.env.PACKAGE_VERSION}_x64-setup.exe\`
+              - Linux:
+                - \`Xhot.It_${process.env.PACKAGE_VERSION}_amd64.deb\`
+                - \`Xhot It-${process.env.PACKAGE_VERSION}.x86_64.rpm\`
+
+              `,
             })
             return data.id
         env:

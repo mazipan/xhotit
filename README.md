@@ -6,6 +6,10 @@ Xhot it (read as "shot it") is just another screenshot app in your desktop: an e
 
 ![Screen Record](./screenrecord.gif)
 
+## Download
+
+Check on the [release page](https://github.com/mazipan/xhotit/releases)
+
 ## Features
 
 - **🖼️ Capture Area**: capture screenshot using free selection

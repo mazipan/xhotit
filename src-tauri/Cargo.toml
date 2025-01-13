@@ -47,7 +47,7 @@ active-win-pos-rs = "0.9"
 cocoa = "0.26.0"
 
 
-[target."cfg(not(target_os = \"windows\"))".dependencies]
+# [target."cfg(not(target_os = \"windows\"))".dependencies]
 fix-path-env = { git = "https://github.com/tauri-apps/fix-path-env-rs" }
 
 # Maybe unused

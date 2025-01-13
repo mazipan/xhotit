@@ -39,17 +39,17 @@ jobs:
               name: `xhotit.v${process.env.PACKAGE_VERSION}`,
               body: `Take a look at the assets to download and install this app.
 
-              Executable Assets:
+              ## 📦 Executable Assets
 
-              - Mac:
-                - Silicon/M Series: \`Xhot.It_${process.env.PACKAGE_VERSION}_aarch64.dmg\`
-                - Intel: \`Xhot.It_${process.env.PACKAGE_VERSION}_x64.dmg\`
-              - Windows:
-                - \`Xhot.It_${process.env.PACKAGE_VERSION}_x64_en-US.msi\`
-                - \`Xhot.It_${process.env.PACKAGE_VERSION}_x64-setup.exe\`
-              - Linux:
-                - \`Xhot.It_${process.env.PACKAGE_VERSION}_amd64.deb\`
-                - \`Xhot It-${process.env.PACKAGE_VERSION}.x86_64.rpm\`
+              - **🍏 Mac**:
+                - Silicon: ▶️ \`Xhot.It_[version]_aarch64.dmg\`
+                - Intel  : ▶️ \`Xhot.It_[version]_x64.dmg\`
+              - **🪟 Windows**:
+                - ▶️ \`Xhot.It_[version]_x64_en-US.msi\`
+                - ▶️ \`Xhot.It_[version]_x64-setup.exe\`
+              - **🐧 Linux**:
+                - ▶️ \`Xhot.It_[version]_amd64.deb\`
+                - ▶️ \`Xhot It-[version].x86_64.rpm\`
 
               `,
             })
@@ -106,6 +106,7 @@ jobs:
         with:
           releaseId: ${{ needs.create-release.outputs.release_id }}
           args: ${{ matrix.args }}
+          tauriScript: bun run tauri
 
   publish-release:
     permissions:

@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Xhot It",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "identifier": "com.xhotit.app",
   "build": {
     "beforeDevCommand": "bun run dev",
@@ -29,7 +29,13 @@
           "*/**"
         ]
       },
-      "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost blob: data:"
+      "csp": {
+        "default-src": "'self' ipc: asset: blob: data: http://asset.localhost http://ipc.localhost",
+        "connect-src": "'self' ipc: asset: blob: data: http://asset.localhost http://ipc.localhost",
+        "font-src": ["https://fonts.gstatic.com"],
+        "img-src": "'self' asset: blob: data: http://asset.localhost",
+        "style-src": "'unsafe-inline' 'self' https://fonts.googleapis.com"
+      }
     }
   },
   "bundle": {

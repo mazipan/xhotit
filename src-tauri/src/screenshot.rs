@@ -17,7 +17,6 @@ use crate::{
 pub fn capture_screen(selection: &SelectionCoords, file_path: &PathBuf) {
     let start = Instant::now();
     let screen = Screen::from_point(0, 0).unwrap();
-    println!("capturer {screen:?}");
 
     let x: i32;
     let y: i32;
@@ -64,8 +63,6 @@ pub fn get_screenshot_path(app_handle: &AppHandle) -> PathBuf {
             Ok(_) => println!("Directories created successfully"),
             Err(e) => println!("Error creating directories: {}", e),
         }
-    } else {
-        println!("Path already exists");
     }
 
     // generate timestamp screenshot name

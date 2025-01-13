@@ -1,6 +1,6 @@
 [package]
 name = "xhotit"
-version = "0.1.0"
+version = "1.0.1"
 description = "Xhot It - Screen Capture"
 authors = ["Irfan Maulana"]
 edition = "2021"
@@ -24,6 +24,7 @@ tauri = { version = "2.2.1", features = [
   "tray-icon",
   "image-ico",
   "image-png",
+  # "devtools",
 ] }
 tauri-plugin-opener = "2.2.3"
 tauri-plugin-window-state = "2.2.0"

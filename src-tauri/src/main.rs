@@ -21,12 +21,17 @@ use tauri::{
     tray::TrayIconBuilder
 };
 use tauri_plugin_opener::OpenerExt;
+use fix_path_env::fix;
 
 fn main() {
     // Based on issue: https://github.com/tauri-apps/tauri/issues/7063
     // https://github.com/tauri-apps/fix-path-env-rs
     // #[cfg(not(target_os="windows"))]
-    let _ = fix_path_env::fix();
+    if let Err(e) = fix() {
+        println!("{}", e);
+    } else {
+        println!("PATH: {}", std::env::var("PATH").unwrap());
+    }
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())

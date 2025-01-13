@@ -92,7 +92,7 @@ export const MainAppContainer = () => {
         )}
 
         {selectedScreenshot && (
-          <Allotment.Pane minSize={200} maxSize={400} preferredSize={200}>
+          <Allotment.Pane minSize={230} maxSize={400} preferredSize={230}>
             <SettingPanel
               gradient={selectedGradient}
               onClickNewGradient={(newGradient) => {
@@ -100,18 +100,21 @@ export const MainAppContainer = () => {
               }}
               padding={padding}
               onChangePadding={(e) => {
-                const newVal = e.target.value;
-                setPadding(parseInt(newVal));
+                const newVal = e.target.value || '0';
+                setPadding(parseInt(newVal, 10));
               }}
               bgRounded={bgRounded}
               onChangeBgRounded={(e) => {
-                const newVal = e.target.value;
-                setBgRounded(parseInt(newVal));
+                const newVal = e.target.value || '0';
+                setBgRounded(parseInt(newVal, 10));
               }}
               imgRounded={imgRounded}
               onChangeImgRounded={(e) => {
-                const newVal = e.target.value;
-                setImgRounded(parseInt(newVal));
+                const newVal = e.target.value || '0';
+                setImgRounded(parseInt(newVal, 10));
+              }}
+              onReset={() => {
+                setSelectedScreenshot(undefined);
               }}
             />
           </Allotment.Pane>

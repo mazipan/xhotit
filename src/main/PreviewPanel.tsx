@@ -19,7 +19,7 @@ export function PreviewPanel({
   return (
     <div id="preview" className="flex flex-col items-start gap-6 p-4">
       <h2 className="font-bold text-lg">
-        Image Previewer {image && <small>({getAssetFilename(image)})</small>}
+        Image Previewer {image && <small className="text-xs text-gray-400">({getAssetFilename(image)})</small>}
       </h2>
 
       <div className="relative overflow-auto">

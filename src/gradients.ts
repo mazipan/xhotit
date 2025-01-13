@@ -96,6 +96,21 @@ export const GRADIENTS: ClassMap[] = [
     cssNative:
       'linear-gradient(to right, rgb(255, 228, 230), rgb(204, 251, 241))',
   },
+  {
+    id: 'beachside',
+    class: 'bg-gradient-to-r from-yellow-200 via-green-200 to-green-500',
+    cssNative: 'linear-gradient(to right, rgb(254, 240, 138), rgb(187, 247, 208), rgb(34, 197, 94))'
+  },
+  {
+    id: 'hawaii',
+    class: 'bg-gradient-to-r from-green-300 via-yellow-300 to-pink-300',
+    cssNative: 'linear-gradient(to right, rgb(134, 239, 172), rgb(253, 224, 71), rgb(249, 168, 212))'
+  },
+  {
+    id: 'burning-sunrise',
+    class: 'bg-gradient-to-r from-yellow-600 to-red-600',
+    cssNative: 'linear-gradient(to right, rgb(202, 138, 4), rgb(220, 38, 38))'
+  }
 ];
 
 export const DEFAULT_GRADIENT = GRADIENTS[0]

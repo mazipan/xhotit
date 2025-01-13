@@ -1,6 +1,12 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod app_command;
+mod app_directory;
+mod constant;
+mod overlay;
+mod screenshot;
+
 use app_command::{
     get_screenshot_files, open_app_directory, open_overlay, screenshot, screenshot_active_window,
     screenshot_monitor, stop_screenshot, reset_app,
@@ -15,12 +21,6 @@ use tauri::{
     tray::TrayIconBuilder
 };
 use tauri_plugin_opener::OpenerExt;
-
-mod app_command;
-mod app_directory;
-mod constant;
-mod overlay;
-mod screenshot;
 
 fn main() {
     tauri::Builder::default()

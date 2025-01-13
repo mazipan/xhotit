@@ -87,7 +87,7 @@ export async function downloadImageFromDom(
             }
           })
           .catch(async (error) => {
-            console.error(error);
+            console.error('Failed when try to save file!', error);
             await message('Failed when try to save file!', {
               title: 'Error Info',
               kind: 'error',

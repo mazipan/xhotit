@@ -8,12 +8,11 @@ import { COMMAND } from "../constant";
 
 const onSelectionEnd = async (coords: AreaCoords) => {
   try {
-    console.log("coords", coords);
     hideCursor();
     await invoke(COMMAND.SCREENSHOT, { coords });
     showCursor();
   } catch (error) {
-    console.error(error);
+    console.error("Error when invoke command screenshot", error);
   }
 };
 

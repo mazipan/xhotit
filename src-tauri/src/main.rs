@@ -8,20 +8,20 @@ mod overlay;
 mod screenshot;
 
 use app_command::{
-    get_screenshot_files, open_app_directory, open_overlay, screenshot, screenshot_active_window,
-    screenshot_monitor, stop_screenshot, reset_app,
+    get_screenshot_files, open_app_directory, open_overlay, reset_app, screenshot,
+    screenshot_active_window, screenshot_monitor, stop_screenshot,
 };
 
 use overlay::{reopen_main_window, toggle_overlay_window};
 use screenshot::{capture_monitor, capture_window};
 
+use fix_path_env::fix;
 use tauri::{
     image::Image,
     menu::{IconMenuItem, MenuBuilder, MenuItem},
-    tray::TrayIconBuilder
+    tray::TrayIconBuilder,
 };
 use tauri_plugin_opener::OpenerExt;
-use fix_path_env::fix;
 
 fn main() {
     // Based on issue: https://github.com/tauri-apps/tauri/issues/7063
@@ -29,8 +29,6 @@ fn main() {
     // #[cfg(not(target_os="windows"))]
     if let Err(e) = fix() {
         println!("{}", e);
-    } else {
-        println!("PATH: {}", std::env::var("PATH").unwrap());
     }
 
     tauri::Builder::default()
@@ -73,43 +71,18 @@ fn main() {
                 Some("CmdOrCtrl+Shift+3"),
             )?;
 
-            let reopen_i = MenuItem::with_id(
-                app,
-                "reopen_app",
-                "Reopen Xhot It",
-                true,
-                None::<&str>,
-            )?;
+            let reopen_i =
+                MenuItem::with_id(app, "reopen_app", "Reopen Xhot It", true, None::<&str>)?;
 
-            let report_bug_i = MenuItem::with_id(
-                app,
-                "report_bug",
-                "Report a Bug",
-                true,
-                None::<&str>,
-            )?;
+            let report_bug_i =
+                MenuItem::with_id(app, "report_bug", "Report a Bug", true, None::<&str>)?;
 
-            let quit_i = MenuItem::with_id(
-                app,
-                "quit",
-                "Quit",
-                true,
-                Some("CmdOrCtrl+Q"),
-            )?;
+            let quit_i = MenuItem::with_id(app, "quit", "Quit", true, Some("CmdOrCtrl+Q"))?;
 
-            let menu_builder =
-                MenuBuilder::new(app)
-                .items(&[
-                    &capture_area_i,
-                    &capture_active_i,
-                    &capture_screen_i,
-                ])
+            let menu_builder = MenuBuilder::new(app)
+                .items(&[&capture_area_i, &capture_active_i, &capture_screen_i])
                 .separator()
-                .items(&[
-                    &reopen_i,
-                    &report_bug_i,
-                    &quit_i,
-                ])
+                .items(&[&reopen_i, &report_bug_i, &quit_i])
                 .build()?;
 
             let _tray = TrayIconBuilder::new()

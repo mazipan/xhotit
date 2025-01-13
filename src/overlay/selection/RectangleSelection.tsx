@@ -30,7 +30,7 @@ export default class ReactRectangleSelection extends React.Component<
   Props,
   State
 > {
-  animationInProgress: NodeJS.Timeout | undefined;
+  animationInProgress: any;
   constructor(props: Props) {
     super(props);
     this.animationInProgress = undefined;
@@ -75,7 +75,8 @@ export default class ReactRectangleSelection extends React.Component<
 
   handleMouseDown(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     if (this.props.disabled) return;
-    let doubleClick = false;
+    // @ts-ignore
+    // let doubleClick = false;
     clearTimeout(this.animationInProgress);
     this.animationInProgress = undefined;
     this.setState({ selectionBox: false, animation: "" });
@@ -86,7 +87,7 @@ export default class ReactRectangleSelection extends React.Component<
       e.target.id === "react-rectangle-selection"
     ) {
       this.setState({ selectionBox: false, animation: "" });
-      doubleClick = true;
+      // doubleClick = true;
     }
 
     this.setState({

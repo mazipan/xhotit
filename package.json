@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tbundle": "bundle --bundles app,dmg",
+    "tbundle": "tauri bundle --bundles app",
     "tdev": "tauri dev",
     "tauri": "tauri"
   },

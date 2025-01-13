@@ -17,9 +17,20 @@ Check on the [release page](https://github.com/mazipan/xhotit/releases)
 - **🖥️ Capture Screen**: capture the whole screen
 - **🎨 Backdrop Background**: setting backdrop background
 
-## Enable screen recording in Mac
+
+## Additional Info for Mac OS
+
+### Enable screen recording in Mac
 
 ▶️ https://support.apple.com/en-ca/guide/mac-help/mchld6aa7d23/mac
+
+### Resolve app is damaged
+
+Run this command:
+
+```bash
+xattr -c /Applications/Xhot It.app
+```
 
 ## Development
 

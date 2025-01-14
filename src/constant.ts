@@ -7,6 +7,7 @@ export const COMMAND = {
   SCREENSHOT: "screenshot",
   SCREENSHOT_ACTIVE_WINDOW: "screenshot_active_window",
   RESET_APP: "reset_app",
+  OPEN_COMPRESS: "open_compress",
 } as const
 
 export const EVENT = {

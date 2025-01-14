@@ -1,10 +1,10 @@
 
 import { invoke } from "@tauri-apps/api/core";
-import styles from "./App.module.css";
 import RectangleSelection, { AreaCoords } from "./selection/RectangleSelection";
 import { useHandleEsc } from "./hooks/useHandleEsc";
 import { hideCursor, showCursor } from "./utils/cursor";
 import { COMMAND } from "../constant";
+import clsx from "clsx";
 
 const onSelectionEnd = async (coords: AreaCoords) => {
   try {
@@ -20,7 +20,7 @@ export const OverlayAppContainer = () => {
   useHandleEsc();
 
   return (
-    <div id="container" className={styles.container}>
+    <div id="container" className={clsx('w-full bg-transparent h-screen cursor-crosshair')}>
       <RectangleSelection
         onSelectionEnd={onSelectionEnd}
         style={{

@@ -1,6 +1,8 @@
-import "./index.css";
+import "./styles/index.css";
+
 import { OverlayAppContainer } from "./overlay/OverlayAppContainer";
 import { MainAppContainer } from "./main/MainAppContainer";
+import { CompressAppContainer } from "./compress/CompressAppContainer";
 
 type Props = {
   windowId?: string | null;
@@ -8,10 +10,13 @@ type Props = {
 
 function App({ windowId }: Props) {
   if (windowId === "overlay") {
-    import("./styles.overlay.css");
+    import("./styles/styles.overlay.css");
     return <OverlayAppContainer />;
+  } if (windowId === "compress") {
+    import("./styles/styles.compress.css");
+    return <CompressAppContainer />;
   } else {
-    import("./styles.main.css");
+    import("./styles/styles.main.css");
   }
 
   return <MainAppContainer />;

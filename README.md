@@ -4,9 +4,9 @@
 
 Xhot it (read as "shot it") is just another screenshot app in your desktop: an experimental application. powered by [Tauri v2](https://v2.tauri.app/).
 
-![Screenshot](./screenshot.png)
+![Screenshot](./screenshots/screenshot.png)
 
-![Screen Record](./screenrecord.gif)
+![Screen Record](./screenshots/screenrecord.gif)
 
 ## Features
 
@@ -21,7 +21,7 @@ Download the executable files in our [release page](https://github.com/mazipan/x
 
 ## 🍏 Known Issues in MacOS
 
-1. Enable screen recording in Mac
+### 1. Enable screen recording in Mac
 
 - Go to `System Settings` > `Privacy & Security`
 - Scroll down to `Screen & System Audio Recording`, click it
@@ -29,7 +29,9 @@ Download the executable files in our [release page](https://github.com/mazipan/x
 
 ▶️ https://support.apple.com/en-ca/guide/mac-help/mchld6aa7d23/mac
 
-2. Can not open the App
+### 2. Can not open the App
+
+![MacOS can not open](./screenshots/mac-cannot-open.png)
 
 It was blocked by default in MacOS, you need to give an access to the installed app. Check these step by step:
 
@@ -37,7 +39,9 @@ It was blocked by default in MacOS, you need to give an access to the installed 
 - Scroll down to `Security` section
 - Make sure to "Open Anyway" when it's asked
 
-3. Resolve app is damaged
+![MacOS open app anyway](./screenshots/mac-open-anyway.png)
+
+### 3. Resolve app is damaged
 
 If the App can not be open, and show message "App is damaged", you need to enter additional command in your terminal:
 

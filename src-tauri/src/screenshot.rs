@@ -10,7 +10,7 @@ use crate::{
     constant::{
         APP_DOWNLOAD_DIR, ON_CAPTURE_MONITOR_EVENT, ON_GET_ACTIVE_WINDOW_EVENT, ON_SCREENSHOT_EVENT,
     },
-    overlay::open_main_window,
+    app_win_manager::open_main_window,
 };
 
 // TODO: Migrate to XCap: https://github.com/nashaofu/xcap

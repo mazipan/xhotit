@@ -1,10 +1,11 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Capability for the main window",
-  "windows": ["main"],
+  "description": "Capability for the all window",
+  "windows": ["main", "compress", "overlay"],
   "permissions": [
     "core:default",
+    "core:path:allow-resolve-directory",
     "opener:default",
     "window-state:default",
     "upload:allow-download",

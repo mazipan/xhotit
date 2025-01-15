@@ -4,15 +4,16 @@
 mod app_command;
 mod app_directory;
 mod constant;
-mod overlay;
+mod app_win_manager;
 mod screenshot;
+mod image_compressor;
 
 use app_command::{
     get_screenshot_files, open_app_directory, open_overlay, reset_app, screenshot,
-    screenshot_active_window, screenshot_monitor, stop_screenshot,
+    screenshot_active_window, screenshot_monitor, stop_screenshot, open_compress, exec_compress,
 };
 
-use overlay::{reopen_main_window, toggle_overlay_window};
+use app_win_manager::{reopen_main_window, toggle_compress_window, toggle_overlay_window};
 use screenshot::{capture_monitor, capture_window};
 
 use fix_path_env::fix;
@@ -71,6 +72,9 @@ fn main() {
                 Some("CmdOrCtrl+Shift+3"),
             )?;
 
+            let compress_i =
+                MenuItem::with_id(app, "compress_image", "Compress Image", true, Some("CmdOrCtrl+Shift+4"))?;
+
             let reopen_i =
                 MenuItem::with_id(app, "reopen_app", "Reopen Xhot It", true, None::<&str>)?;
 
@@ -80,7 +84,7 @@ fn main() {
             let quit_i = MenuItem::with_id(app, "quit", "Quit", true, Some("CmdOrCtrl+Q"))?;
 
             let menu_builder = MenuBuilder::new(app)
-                .items(&[&capture_area_i, &capture_active_i, &capture_screen_i])
+                .items(&[&capture_area_i, &capture_active_i, &capture_screen_i, &compress_i])
                 .separator()
                 .items(&[&reopen_i, &report_bug_i, &quit_i])
                 .build()?;
@@ -97,6 +101,9 @@ fn main() {
                     }
                     "capture_screen" => {
                         capture_monitor(app);
+                    }
+                    "compress_image" => {
+                        toggle_compress_window(app);
                     }
                     "reopen_app" => {
                         reopen_main_window(app);
@@ -125,6 +132,8 @@ fn main() {
             open_app_directory,
             get_screenshot_files,
             reset_app,
+            open_compress,
+            exec_compress,
         ])
         .run(tauri::generate_context!())
         .expect("ERROR: error while running tauri application");

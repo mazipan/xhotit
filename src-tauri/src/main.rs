@@ -6,10 +6,11 @@ mod app_directory;
 mod constant;
 mod app_win_manager;
 mod screenshot;
+mod image_compressor;
 
 use app_command::{
     get_screenshot_files, open_app_directory, open_overlay, reset_app, screenshot,
-    screenshot_active_window, screenshot_monitor, stop_screenshot, open_compress,
+    screenshot_active_window, screenshot_monitor, stop_screenshot, open_compress, exec_compress,
 };
 
 use app_win_manager::{reopen_main_window, toggle_compress_window, toggle_overlay_window};
@@ -132,6 +133,7 @@ fn main() {
             get_screenshot_files,
             reset_app,
             open_compress,
+            exec_compress,
         ])
         .run(tauri::generate_context!())
         .expect("ERROR: error while running tauri application");

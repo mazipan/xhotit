@@ -6,6 +6,14 @@ import { domToPng } from 'modern-screenshot';
 import { customAlphabet } from 'nanoid';
 import { APP_DOWNLOAD_DIR } from './constant';
 
+export function delay(time: number) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
+export function formatNumber(num: number) {
+  return new Intl.NumberFormat("id-ID").format(num)
+}
+
 export function getRandomId(size = 5) {
   const nanoid = customAlphabet(
     '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
@@ -102,4 +110,21 @@ export async function downloadImageFromDom(
         });
       });
   }
+}
+
+export async function getImageSize(publicSrc: string): Promise<number> {
+  if (!publicSrc) {
+    return 0;
+  }
+
+  const r = await fetch(publicSrc, {
+    headers: new Headers({
+      Origin: location.origin,
+    }),
+    mode: 'cors',
+    method: 'HEAD',
+  });
+
+  const fSize = parseInt(r.headers.get('Content-Length') || '0');
+  return fSize;
 }

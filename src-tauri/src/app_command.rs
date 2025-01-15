@@ -2,7 +2,13 @@ use std::{path::PathBuf, process::Command as ProcessCommand};
 use tauri::{command, AppHandle, Emitter, Manager};
 
 use crate::{
-    app_directory::{get_app_directory, list_images_in_directory_sorted}, app_win_manager::{reopen_main_window, toggle_compress_window, toggle_overlay_window}, constant::{APP_DOWNLOAD_DIR, ON_SCREENSHOT_EVENT}, screenshot::{capture_monitor, capture_screen, capture_window, get_screenshot_path, SelectionCoords}
+    app_directory::{get_app_directory, list_images_in_directory_sorted},
+    app_win_manager::{reopen_main_window, toggle_compress_window, toggle_overlay_window},
+    constant::{APP_DOWNLOAD_DIR, ON_SCREENSHOT_EVENT},
+    image_compressor::{process_jpeg, ImageParams},
+    screenshot::{
+        capture_monitor, capture_screen, capture_window, get_screenshot_path, SelectionCoords,
+    },
 };
 
 /**
@@ -109,4 +115,23 @@ pub fn open_app_directory(app_handle: AppHandle, subdirectory: Option<String>) {
 #[command]
 pub fn open_compress(app_handle: AppHandle) {
     toggle_compress_window(&app_handle);
+}
+
+/**
+ * When trigger click Compress Image
+ */
+#[command]
+pub fn exec_compress(app_handle: AppHandle, image: ImageParams) {
+    // TODO: Implement compress single image
+    println!("Image:: {}", image.to_string());
+
+    if image.name.to_lowercase().contains(".png") {
+        println!("> TODO: Compress png:: {}", image.to_string());
+    } else if image.name.to_lowercase().contains(".jpg")
+        || image.name.to_lowercase().contains(".jpeg")
+    {
+        println!("> TODO: Compress jpeg:: {}", image.to_string());
+        process_jpeg(app_handle, &image.src)
+    }
+
 }

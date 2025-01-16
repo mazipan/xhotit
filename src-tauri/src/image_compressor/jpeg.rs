@@ -1,46 +1,9 @@
-#![deny(clippy::all)]
-use std::fmt;
-use std::sync::mpsc;
-use std::thread;
-
 use mozjpeg_sys::*;
-use serde::{Deserialize, Serialize};
-use std::ffi::CString;
-use std::mem;
+use std::{ffi::CString, mem, path::Path, sync::mpsc, thread};
 use tauri::{AppHandle, Emitter};
 
+use super::shared::{DecoderParam, ImageResponse};
 use crate::constant::ON_FINISH_COMPRESS_EVENT;
-
-#[derive(Serialize, Deserialize)]
-pub struct ImageParams {
-    pub src: String,
-    pub public_src: String,
-    pub name: String,
-    pub file_size: i32,
-    pub compressed_file_size: i32,
-    pub saving: i32,
-}
-
-#[derive(Serialize, Deserialize, Clone)]
-pub struct ImageResponse {
-    pub origin: String,
-    pub compressed: String,
-}
-
-impl fmt::Display for ImageParams {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "ImageParams:: src:{}, name:{}, file_size: {}",
-            self.src, self.name, self.file_size
-        )
-    }
-}
-
-pub struct DecoderParam {
-    pub path: String,
-    pub app: AppHandle,
-}
 
 pub struct EncoderParam {
     pub buffer: Vec<u8>,
@@ -52,64 +15,72 @@ pub struct EncoderParam {
 }
 
 pub fn process_jpeg(app_handle: AppHandle, path_str: &str) {
-    let (tx_decoder, rx_decoder) = mpsc::channel::<DecoderParam>();
-    let (tx_encoder, rx_encoder) = mpsc::channel::<EncoderParam>();
+    let is_file_exist = Path::new(&path_str).exists();
 
-    // Sending the path to be encode in the background
-    tx_decoder
-        .send(DecoderParam {
-            path: String::from(path_str),
-            app: app_handle,
-        })
-        .unwrap();
+    if is_file_exist {
+        let (tx_decoder, rx_decoder) = mpsc::channel::<DecoderParam>();
+        let (tx_encoder, rx_encoder) = mpsc::channel::<EncoderParam>();
 
-    thread::spawn(move || {
-        loop {
-            let job = rx_decoder.recv();
+        // Sending the path to be encode in the background
+        tx_decoder
+            .send(DecoderParam {
+                path: String::from(path_str),
+                app: app_handle,
+            })
+            .unwrap();
+
+        thread::spawn(move || {
+            loop {
+                let job = rx_decoder.recv();
+                match job {
+                    Ok(job) => {
+                        let res = unsafe { decode_jpeg(&job.path) };
+
+                        // parameter to be pass to encoder (compress then write new file)
+                        let p = EncoderParam {
+                            buffer: res.0,
+                            width: res.1,
+                            height: res.2,
+                            // New Image Quality --> Hardcoded for now
+                            quality: 70,
+                            dest: job.path,
+                            app: job.app,
+                        };
+
+                        // Pass to the next thread
+                        tx_encoder.send(p).unwrap();
+                    }
+                    Err(_) => break,
+                }
+            }
+        });
+
+        drop(tx_decoder);
+
+        thread::spawn(move || loop {
+            let job = rx_encoder.recv();
             match job {
                 Ok(job) => {
-                    let res = unsafe { decode_jpeg(&job.path) };
+                    let origin_path = String::from(&job.dest);
+                    let dest_path = get_dest_path_jpg(&origin_path);
 
-                    // parameter to be pass to encoder (compress then write new file)
-                    let p = EncoderParam {
-                        buffer: res.0,
-                        width: res.1,
-                        height: res.2,
-                        // New Image Quality --> Hardcoded for now
-                        quality: 70,
-                        dest: job.path,
-                        app: job.app,
+                    unsafe {
+                        encode_jpeg(&job.buffer, job.width, job.height, job.quality, &dest_path)
                     };
 
-                    // Pass to the next thread
-                    tx_encoder.send(p).unwrap();
+                    let payload = ImageResponse {
+                        origin: origin_path,
+                        compressed: dest_path.to_string(),
+                    };
+
+                    job.app.emit(ON_FINISH_COMPRESS_EVENT, payload).unwrap();
                 }
                 Err(_) => break,
             }
-        }
-    });
+        });
 
-    thread::spawn(move || loop {
-        let job = rx_encoder.recv();
-        match job {
-            Ok(job) => {
-                let origin_path = String::from(&job.dest);
-                let dest_path = &origin_path.replace(".jpg", ".min.jpg").replace(".jpeg", ".min.jpeg");
-
-                unsafe { encode_jpeg(&job.buffer, job.width, job.height, job.quality, &dest_path) };
-
-                let payload = ImageResponse {
-                    origin: origin_path,
-                    compressed: dest_path.to_string(),
-                };
-
-                job.app
-                    .emit(ON_FINISH_COMPRESS_EVENT, payload)
-                    .unwrap();
-            }
-            Err(_) => break,
-        }
-    });
+        // drop(tx_encoder);
+    }
 }
 
 unsafe fn decode_jpeg(file_name: &str) -> (Vec<u8>, u32, u32) {
@@ -191,6 +162,7 @@ unsafe fn encode_jpeg(buffer: &[u8], width: u32, height: u32, quality: i32, dest
 
     jpeg_finish_compress(&mut cinfo);
     jpeg_destroy_compress(&mut cinfo);
+
     libc::fclose(fh);
 }
 
@@ -214,4 +186,25 @@ unsafe fn get_jpeg_size(file_name: &str) -> (u32, u32) {
     libc::fclose(fh);
 
     (width, height)
+}
+
+
+pub fn get_dest_path_jpg(path_str: &str) -> String {
+    if !path_str.contains(".min") {
+        return replace_jpg_ext(path_str);
+    } else {
+        return String::from(path_str);
+    }
+}
+
+fn replace_jpg_ext(path_str: &str) -> String {
+    let res = &path_str
+    .replace(".jpg", ".min.jpg")
+    .replace(".JPG", ".min.jpg")
+    .replace(".jpeg", ".min.jpeg")
+    .replace(".JPEG", ".min.jpeg");
+
+    let str = String::from(res);
+
+    return str;
 }

@@ -16,7 +16,7 @@ export function GhostPanel({
   imgRounded: number;
 }) {
   return (
-    <div className="absolute -top-[2000px] left-0 w-full">
+    <div className="absolute -top-[4000px] -left-[4000px] w-full">
       <div
         id="image-wrapper"
         className={clsx(

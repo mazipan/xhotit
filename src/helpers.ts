@@ -6,12 +6,19 @@ import { domToPng } from 'modern-screenshot';
 import { customAlphabet } from 'nanoid';
 import { APP_DOWNLOAD_DIR } from './constant';
 
+export type DragAndDropPayload = {
+  paths: string[];
+  position: { x: number; y: number };
+};
+
 export function delay(time: number) {
-  return new Promise(resolve => setTimeout(resolve, time));
+  return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 export function formatNumber(num: number) {
-  return new Intl.NumberFormat("id-ID").format(num)
+  return new Intl.NumberFormat('id-ID', {
+    maximumFractionDigits: 2,
+  }).format(num);
 }
 
 export function getRandomId(size = 5) {

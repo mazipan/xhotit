@@ -2,13 +2,9 @@ use std::{path::PathBuf, process::Command as ProcessCommand};
 use tauri::{command, AppHandle, Emitter, Manager};
 
 use crate::{
-    app_directory::{get_app_directory, list_images_in_directory_sorted},
-    app_win_manager::{reopen_main_window, toggle_compress_window, toggle_overlay_window},
-    constant::{APP_DOWNLOAD_DIR, ON_SCREENSHOT_EVENT},
-    image_compressor::{process_jpeg, ImageParams},
-    screenshot::{
+    app_directory::{get_app_directory, list_images_in_directory_sorted}, app_win_manager::{reopen_main_window, toggle_compress_window, toggle_overlay_window}, constant::{APP_DOWNLOAD_DIR, ON_SCREENSHOT_EVENT}, image_compressor::{jpeg::process_jpeg, png::process_png, shared::ImageParams}, screenshot::{
         capture_monitor, capture_screen, capture_window, get_screenshot_path, SelectionCoords,
-    },
+    }
 };
 
 /**
@@ -122,16 +118,11 @@ pub fn open_compress(app_handle: AppHandle) {
  */
 #[command]
 pub fn exec_compress(app_handle: AppHandle, image: ImageParams) {
-    // TODO: Implement compress single image
-    println!("Image:: {}", image.to_string());
-
     if image.name.to_lowercase().contains(".png") {
-        println!("> TODO: Compress png:: {}", image.to_string());
+        process_png(app_handle, &image.src)
     } else if image.name.to_lowercase().contains(".jpg")
         || image.name.to_lowercase().contains(".jpeg")
     {
-        println!("> TODO: Compress jpeg:: {}", image.to_string());
         process_jpeg(app_handle, &image.src)
     }
-
 }

@@ -57,8 +57,9 @@ image = { version = "0.25", default-features = false, features = [
 ] }
 png = "0.17"
 jpeg-decoder = "0.3"
-mozjpeg-sys="2.2"
+mozjpeg-sys = { version = "2.2", default-features = false }
 libc = "0.2"
+lodepng = { version = "3.10", default-features = false }
 
 # [target."cfg(not(target_os = \"windows\"))".dependencies]
 fix-path-env = { git = "https://github.com/tauri-apps/fix-path-env-rs" }

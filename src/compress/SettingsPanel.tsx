@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { PngFilter, PngFilterEnum, useCompressAppStore } from './store';
+import { InformationCircleIcon, PhotoIcon } from '@heroicons/react/24/outline';
 
 export function SettingsPanel({ show }: { show: boolean }) {
   const {
@@ -20,15 +21,13 @@ export function SettingsPanel({ show }: { show: boolean }) {
         <div className="w-full">
           <div className="flex justify-between gap-2 flex-wrap items-center">
             <h2 className="font-bold">Overwrite</h2>
-            <label
-              className="inline-flex items-center cursor-pointer"
-            >
+            <label className="inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
-                value={settings.overwrite ? "yes" : "no"}
+                value={settings.overwrite ? 'yes' : 'no'}
                 className="sr-only peer"
                 onChange={() => {
-                    toggleSettingOverwrite()
+                  toggleSettingOverwrite();
                 }}
                 defaultChecked={settings.overwrite}
               />
@@ -54,15 +53,29 @@ export function SettingsPanel({ show }: { show: boolean }) {
               const newVal = e.target.value || '0';
               setSettingQuality(parseInt(newVal, 10));
             }}
-            className="w-full"
+            className="w-full mt-2"
           />
         </div>
 
         <div className="w-full">
-          <h2 className="font-bold">
-            Filter <small className="text-xs text-gray-400">(Only for PNG)</small>
-          </h2>
-          <div>
+          <div className="flex items-center gap-2 justify-between">
+            <h2 className="font-bold">
+              Filter
+            </h2>
+            <div className='has-tooltip'>
+              <div className='tooltip rounded-lg shadow-lg p-2 -mt-52 text-gray-400 text-xs w-[300px] right-4 bg-slate-100 dark:bg-slate-700 border'>
+                <b className='flex items-center gap-1'><PhotoIcon className='size-4' /> Applicable for PNG only.</b>
+                <ul className='space-y-2 mt-2'>
+                  <li><b>MINSUM</b>: Use filter that gives minumum sum, as described in the official PNG filter heuristic.</li>
+                  <li><b>ENTROPY</b>: Use the filter type that gives smallest Shannon entropy for this scanline. Depending on the image, this is better or worse than minsum.</li>
+                  <li><b>BRUTE_FORCE</b>: Brute-force-search PNG filters by compressing each filter for each scanline. Experimental, very slow, and only rarely gives better compression than minsum.</li>
+                </ul>
+              </div>
+              <span className="text-xs text-gray-400 flex items-center gap-1 cursor-pointer">What is this? <InformationCircleIcon className="size-4 text-gray-400" /></span>
+            </div>
+          </div>
+
+          <div className='mt-2'>
             <select
               id="countries"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

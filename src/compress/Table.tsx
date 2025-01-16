@@ -36,7 +36,7 @@ export function Table({ images }: { images: ImageStat[] }) {
   };
 
   return (
-    <div className="relative rounded-xl overflow-auto border">
+    <div className="relative rounded-xl overflow-auto border mt-4">
       <table className={styles.table}>
         <thead>
           <tr>

@@ -13,7 +13,7 @@ export function SettingsPanel({ show }: { show: boolean }) {
   return (
     <div
       className={clsx(
-        'fixed top-20 right-4 z-20 w-[250px] max-h-[calc(100%-5rem)] transition-all duration-500 transform shadow-lg bg-slate-50 dark:bg-slate-800',
+        'fixed top-20 right-4 z-20 rounded-lg w-[250px] max-h-[calc(100%-5rem)] transition-all duration-500 transform shadow-lg bg-slate-50 dark:bg-slate-800 shadow-xl',
         show ? 'translate-x-0' : 'translate-x-[110%]'
       )}
     >
@@ -63,7 +63,7 @@ export function SettingsPanel({ show }: { show: boolean }) {
               Filter
             </h2>
             <div className='has-tooltip'>
-              <div className='tooltip rounded-lg shadow-lg p-2 -mt-52 text-gray-400 text-xs w-[300px] right-4 bg-slate-100 dark:bg-slate-700 border'>
+              <div className='tooltip rounded-lg shadow-lg p-3 -mt-52 text-gray-400 text-xs w-[300px] right-4 bg-slate-100 dark:bg-slate-900'>
                 <b className='flex items-center gap-1'><PhotoIcon className='size-4' /> Applicable for PNG only.</b>
                 <ul className='space-y-2 mt-2'>
                   <li><b>MINSUM</b>: Use filter that gives minumum sum, as described in the official PNG filter heuristic.</li>

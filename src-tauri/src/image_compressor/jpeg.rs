@@ -12,9 +12,10 @@ pub struct EncoderParam {
     pub quality: i32,
     pub dest: String,
     pub app: AppHandle,
+    pub overwrite: bool,
 }
 
-pub fn process_jpeg(app_handle: AppHandle, path_str: &str) {
+pub fn process_jpeg(app_handle: AppHandle, path_str: &str, q: i32, overwrite: bool) {
     let is_file_exist = Path::new(&path_str).exists();
 
     if is_file_exist {
@@ -26,6 +27,9 @@ pub fn process_jpeg(app_handle: AppHandle, path_str: &str) {
             .send(DecoderParam {
                 path: String::from(path_str),
                 app: app_handle,
+                filter: String::from(""), // Empty for jpeg
+                overwrite: overwrite,
+                quality: q,
             })
             .unwrap();
 
@@ -41,10 +45,10 @@ pub fn process_jpeg(app_handle: AppHandle, path_str: &str) {
                             buffer: res.0,
                             width: res.1,
                             height: res.2,
-                            // New Image Quality --> Hardcoded for now
-                            quality: 70,
+                            quality: job.quality,
                             dest: job.path,
                             app: job.app,
+                            overwrite: job.overwrite,
                         };
 
                         // Pass to the next thread
@@ -62,7 +66,7 @@ pub fn process_jpeg(app_handle: AppHandle, path_str: &str) {
             match job {
                 Ok(job) => {
                     let origin_path = String::from(&job.dest);
-                    let dest_path = get_dest_path_jpg(&origin_path);
+                    let dest_path = get_dest_path_jpg(&origin_path, job.overwrite);
 
                     unsafe {
                         encode_jpeg(&job.buffer, job.width, job.height, job.quality, &dest_path)
@@ -189,8 +193,8 @@ unsafe fn encode_jpeg(buffer: &[u8], width: u32, height: u32, quality: i32, dest
 // }
 
 
-pub fn get_dest_path_jpg(path_str: &str) -> String {
-    if !path_str.contains(".min") {
+pub fn get_dest_path_jpg(path_str: &str, overwrite: bool) -> String {
+    if !path_str.contains(".min") && !overwrite {
         return replace_jpg_ext(path_str);
     } else {
         return String::from(path_str);

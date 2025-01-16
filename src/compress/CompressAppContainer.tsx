@@ -18,10 +18,11 @@ import { ToolbarAction } from './ToolbarAction';
 import { SettingsPanel } from './SettingsPanel';
 
 export function CompressAppContainer() {
-  const [showSetting, setShowSetting] = useState<boolean>(false)
+  const [showSetting, setShowSetting] = useState<boolean>(false);
 
   const {
     images,
+    settings,
     isProcessing,
     addImage,
     setImages,
@@ -65,15 +66,20 @@ export function CompressAppContainer() {
         // Do not re-invoke for image that is in the progress
         if (image.saving === 0 && !image.progress) {
           setProgress(image);
-          invoke(COMMAND.EXEC_COMPRESS, { image });
+          invoke(COMMAND.EXEC_COMPRESS, {
+            image: {
+              ...image,
+              ...settings,
+            },
+          });
         }
       }
     }
   };
 
   const handleToggleSettingPanel = () => {
-    setShowSetting(prev => !prev);
-  }
+    setShowSetting((prev) => !prev);
+  };
 
   useEffect(() => {
     let unsubscribe = () => {};
@@ -117,16 +123,14 @@ export function CompressAppContainer() {
           handleToggleSettingPanel={handleToggleSettingPanel}
           isProcessing={isProcessing}
           disabled={images.length === 0 || isProcessing}
+          isShowSettingPanel={showSetting}
         />
-
-        <div className="flex gap-1">
-          <div className="flex-grow flex flex-col flex-1 overflow-y-auto gap-4">
-            {images && images.length > 0 ? (
-              <Table images={images} />
-            ) : (
-              <EmptyState />
-            )}
-          </div>
+        <div className="flex flex-col flex-1 overflow-y-auto gap-4">
+          {images && images.length > 0 ? (
+            <Table images={images} />
+          ) : (
+            <EmptyState />
+          )}
         </div>
       </div>
 

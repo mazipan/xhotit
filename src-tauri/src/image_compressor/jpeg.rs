@@ -166,27 +166,27 @@ unsafe fn encode_jpeg(buffer: &[u8], width: u32, height: u32, quality: i32, dest
     libc::fclose(fh);
 }
 
-unsafe fn get_jpeg_size(file_name: &str) -> (u32, u32) {
-    let mut err: jpeg_error_mgr = mem::zeroed();
-    let mut cinfo: jpeg_decompress_struct = mem::zeroed();
-    cinfo.common.err = jpeg_std_error(&mut err);
-    jpeg_create_decompress(&mut cinfo);
+// unsafe fn get_jpeg_size(file_name: &str) -> (u32, u32) {
+//     let mut err: jpeg_error_mgr = mem::zeroed();
+//     let mut cinfo: jpeg_decompress_struct = mem::zeroed();
+//     cinfo.common.err = jpeg_std_error(&mut err);
+//     jpeg_create_decompress(&mut cinfo);
 
-    let c_file_name = CString::new(file_name.as_bytes()).unwrap();
-    let fh = libc::fopen(c_file_name.as_ptr(), b"rb\0".as_ptr().cast());
-    if fh.is_null() {
-        panic!("Can't open {}", file_name);
-    }
-    jpeg_stdio_src(&mut cinfo, fh);
-    jpeg_read_header(&mut cinfo, true as boolean);
+//     let c_file_name = CString::new(file_name.as_bytes()).unwrap();
+//     let fh = libc::fopen(c_file_name.as_ptr(), b"rb\0".as_ptr().cast());
+//     if fh.is_null() {
+//         panic!("Can't open {}", file_name);
+//     }
+//     jpeg_stdio_src(&mut cinfo, fh);
+//     jpeg_read_header(&mut cinfo, true as boolean);
 
-    let width = cinfo.image_width;
-    let height = cinfo.image_height;
+//     let width = cinfo.image_width;
+//     let height = cinfo.image_height;
 
-    libc::fclose(fh);
+//     libc::fclose(fh);
 
-    (width, height)
-}
+//     (width, height)
+// }
 
 
 pub fn get_dest_path_jpg(path_str: &str) -> String {

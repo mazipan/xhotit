@@ -81,6 +81,8 @@ pub fn process_png(app_handle: AppHandle, path_str: &str) {
                 Err(_) => break,
             }
         });
+
+        drop(tx_png);
     }
 }
 

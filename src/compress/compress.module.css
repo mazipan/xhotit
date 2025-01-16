@@ -9,7 +9,7 @@
 
 
 .table {
-  @apply table-auto border-collapse w-full overflow-auto text-sm mt-4;
+  @apply table-auto border-collapse w-full overflow-auto text-sm;
 
   & > thead > tr > th {
     @apply border-b border-t border-r dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left bg-slate-100 dark:bg-slate-900;
@@ -32,6 +32,6 @@
   }
 
   & > tbody > tr:nth-child(even) {
-    @apply bg-slate-100 dark:bg-slate-900;
+    @apply bg-slate-100 dark:bg-zinc-900;
   }
 }

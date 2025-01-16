@@ -6,6 +6,8 @@ import {
 } from '@heroicons/react/24/outline';
 import styles from './compress.module.css';
 import { SpinnerIcon } from '../icons/Spinner';
+import clsx from 'clsx';
+import { useCompressAppStore } from './store';
 
 export function ToolbarAction({
   handleBack,
@@ -14,6 +16,7 @@ export function ToolbarAction({
   handleToggleSettingPanel,
   isProcessing,
   disabled,
+  isShowSettingPanel,
 }: {
   handleBack: () => void;
   handleCompress: () => void;
@@ -21,6 +24,7 @@ export function ToolbarAction({
   handleToggleSettingPanel: () => void;
   isProcessing: boolean;
   disabled: boolean;
+  isShowSettingPanel: boolean;
 }) {
   return (
     <div className="flex flex-wrap gap-4 items-center justify-between p-2 pb-4 border-b">
@@ -46,10 +50,10 @@ export function ToolbarAction({
           Compress
         </button>
         <button
-          className={styles.btn_alt_xs}
+          className={clsx(styles.btn_alt_xs)}
           onClick={handleToggleSettingPanel}
         >
-          <Cog6ToothIcon className="size-4" />
+          <Cog6ToothIcon className={clsx('size-4 transition-transform transform duration-500', isShowSettingPanel && 'rotate-90')} />
         </button>
       </div>
     </div>

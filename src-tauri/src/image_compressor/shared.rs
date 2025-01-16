@@ -10,6 +10,9 @@ pub struct ImageParams {
     pub file_size: i32,
     pub compressed_file_size: i32,
     pub saving: i32,
+    pub quality: i32,
+    pub overwrite: bool,
+    pub filter: String,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -31,5 +34,8 @@ impl fmt::Display for ImageParams {
 pub struct DecoderParam {
     pub path: String,
     pub app: AppHandle,
+    pub quality: i32,
+    pub overwrite: bool,
+    pub filter: String,
 }
 

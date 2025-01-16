@@ -6,11 +6,7 @@ use lodepng::FilterStrategy;
 use std::{path::Path, sync::mpsc, thread};
 use tauri::{AppHandle, Emitter};
 
-// FilterStrategy::MINSUM,
-// FilterStrategy::ENTROPY,
-// FilterStrategy::BRUTE_FORCE,
-
-pub fn process_png(app_handle: AppHandle, path_str: &str) {
+pub fn process_png(app_handle: AppHandle, path_str: &str, q: i32, overwrite: bool, filter: String) {
     let is_file_exist = Path::new(&path_str).exists();
 
     if is_file_exist {
@@ -20,6 +16,9 @@ pub fn process_png(app_handle: AppHandle, path_str: &str) {
             .send(DecoderParam {
                 path: String::from(path_str),
                 app: app_handle,
+                filter: String::from(filter),
+                overwrite: overwrite,
+                quality: q,
             })
             .unwrap();
 
@@ -51,31 +50,27 @@ pub fn process_png(app_handle: AppHandle, path_str: &str) {
                     encoder.settings_mut().set_level(9);
                     *encoder.info_raw_mut() = decoder.info_raw().clone();
                     encoder.info_png_mut().color = decoder.info_raw().clone();
-                    encoder.set_filter_strategy(FilterStrategy::MINSUM, false);
+
+                    if job.filter == "ENTROPY" {
+                        encoder.set_filter_strategy(FilterStrategy::ENTROPY, false);
+                    } else if job.filter == "BRUTE_FORCE" {
+                        encoder.set_filter_strategy(FilterStrategy::BRUTE_FORCE, false);
+                    } else {
+                        encoder.set_filter_strategy(FilterStrategy::MINSUM, false);
+                    }
 
                     let new_png = encoder
                         .encode(img.bytes(), img.width(), img.height())
                         .unwrap();
 
-                    let file_name = Path::new(&path)
-                        .file_stem()
-                        .and_then(|f| f.to_str())
-                        .ok_or("Invalid path")
-                        .unwrap();
-
-                    let dest_path: &str = &get_dest_path_png(&job.path);
+                    let dest_path: &str = &get_dest_path_png(&job.path, job.overwrite);
 
                     let payload = ImageResponse {
                         origin: job.path.to_string(),
                         compressed: dest_path.to_string(),
                     };
 
-                    let new_file_name = format!("{file_name}.min.png");
-
                     std::fs::write(&dest_path, new_png).unwrap();
-
-                    println!("Wrote optimized PNG to {new_file_name}");
-
                     job.app.emit(ON_FINISH_COMPRESS_EVENT, payload).unwrap();
                 }
                 Err(_) => break,
@@ -87,8 +82,8 @@ pub fn process_png(app_handle: AppHandle, path_str: &str) {
 }
 
 
-pub fn get_dest_path_png(path_str: &str) -> String {
-    if !path_str.contains(".min") {
+pub fn get_dest_path_png(path_str: &str, overwrite: bool) -> String {
+    if !path_str.contains(".min") && !overwrite {
         return replace_png_ext(path_str);
     } else {
         return String::from(path_str);

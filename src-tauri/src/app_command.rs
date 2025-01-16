@@ -119,10 +119,10 @@ pub fn open_compress(app_handle: AppHandle) {
 #[command]
 pub fn exec_compress(app_handle: AppHandle, image: ImageParams) {
     if image.name.to_lowercase().contains(".png") {
-        process_png(app_handle, &image.src)
+        process_png(app_handle, &image.src, image.quality, image.overwrite, image.filter)
     } else if image.name.to_lowercase().contains(".jpg")
         || image.name.to_lowercase().contains(".jpeg")
     {
-        process_jpeg(app_handle, &image.src)
+        process_jpeg(app_handle, &image.src, image.quality, image.overwrite)
     }
 }

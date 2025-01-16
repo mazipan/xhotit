@@ -14,6 +14,7 @@ Xhot it (read as "shot it") is just another screenshot app in your desktop: an e
 - **🪟 Capture Active Window**: capture the active window only
 - **🖥️ Capture Screen**: capture the whole screen
 - **🎨 Backdrop Background**: setting backdrop background
+- **⚡️ Image Compression**: compress jpg or png (since v1.1.0)
 
 ## Download
 

@@ -1,0 +1,37 @@
+.btn_alt_xs {
+  @apply px-3 py-2 text-xs font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 flex items-center gap-2 disabled:cursor-not-allowed;
+}
+
+.btn_gradient_xs {
+  @apply px-3 py-2 text-xs font-medium text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 shadow-lg shadow-lime-500/50 dark:shadow-lg dark:shadow-lime-800/80  rounded-lg text-center flex items-center gap-2 disabled:cursor-not-allowed;
+}
+
+
+
+.table {
+  @apply table-auto border-collapse w-full overflow-auto text-sm;
+
+  & > thead > tr > th {
+    @apply border-b border-t border-r dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left bg-slate-100 dark:bg-slate-900;
+  }
+
+  & > thead > tr > th:first-child {
+    @apply rounded-tl-lg border-l;
+  }
+
+  & > thead > tr > th:last-child {
+    @apply rounded-tr-lg;
+  }
+
+  & > tbody > tr > td {
+    @apply border-b border-r dark:border-slate-600 font-medium py-2 px-4 text-left text-slate-900 dark:text-slate-200;
+  }
+
+  & > tbody > tr > td:first-child  {
+    @apply border-l;
+  }
+
+  & > tbody > tr:nth-child(even) {
+    @apply bg-slate-100 dark:bg-zinc-900;
+  }
+}

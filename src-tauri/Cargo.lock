@@ -104,7 +104,7 @@ dependencies = [
  "wayland-backend 0.3.7",
  "wayland-client 0.31.7",
  "wayland-protocols 0.32.5",
- "zbus 5.2.0",
+ "zbus",
 ]
 
 [[package]]
@@ -2088,8 +2088,22 @@ checksum = "cd6f44aed642f18953a158afeb30206f4d50da59fbc66ecb53c66488de73563b"
 dependencies = [
  "bytemuck",
  "byteorder-lite",
+ "image-webp",
  "num-traits",
  "png",
+ "tiff",
+ "zune-core",
+ "zune-jpeg",
+]
+
+[[package]]
+name = "image-webp"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b77d01e822461baa8409e156015a1d91735549f0f2c17691bd2d996bef238f7f"
+dependencies = [
+ "byteorder-lite",
+ "quick-error",
 ]
 
 [[package]]
@@ -2408,6 +2422,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "lodepng"
+version = "3.10.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7b2dea7cda68e381418c985fd8f32a9c279a21ae8c715f2376adb20c27a0fad3"
+dependencies = [
+ "crc32fast",
+ "flate2",
+ "rgb",
+]
+
+[[package]]
 name = "log"
 version = "0.4.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2512,6 +2537,17 @@ dependencies = [
  "libc",
  "wasi 0.11.0+wasi-snapshot-preview1",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "mozjpeg-sys"
+version = "2.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ad3626d7942d5b56cc6d47b1c59724c0a976b786fca059c5aaa904aef6324d55"
+dependencies = [
+ "cc",
+ "dunce",
+ "libc",
 ]
 
 [[package]]
@@ -3303,6 +3339,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "quick-error"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a993555f31e5a609f617c12db6250dedcac1b0a85076912c436e6fc9b2c8e6a3"
+
+[[package]]
 name = "quick-xml"
 version = "0.28.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3589,6 +3631,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "rgb"
+version = "0.8.50"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57397d16646700483b67d2dd6511d79318f9d057fdbd21a4066aeac8b41d310a"
+dependencies = [
+ "bytemuck",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3870,17 +3921,6 @@ checksum = "d98238b800e0d1576d8b6e3de32827c2d74bee68bb97748dcf5071fb53965432"
 dependencies = [
  "nodrop",
  "stable_deref_trait",
-]
-
-[[package]]
-name = "sha1"
-version = "0.10.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3bf829a2d51ab4a5ddf1352d8470c140cadc8301b2ae1789db023f01cedd6ba"
-dependencies = [
- "cfg-if",
- "cpufeatures",
- "digest",
 ]
 
 [[package]]
@@ -4349,9 +4389,9 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-opener"
-version = "2.2.3"
+version = "2.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4d75fdc9ba0391eafb3337aac9d1b34fd353601dd5d4e7498820733f738991e7"
+checksum = "1270bd2f3aabffc2becc05b6aafab3d24fe5679db91bec369fb44865afd7de13"
 dependencies = [
  "dunce",
  "glob",
@@ -4366,7 +4406,7 @@ dependencies = [
  "thiserror 2.0.9",
  "url",
  "windows 0.58.0",
- "zbus 4.4.0",
+ "zbus",
 ]
 
 [[package]]
@@ -5947,7 +5987,7 @@ dependencies = [
 
 [[package]]
 name = "xhotit"
-version = "1.0.1"
+version = "1.1.0"
 dependencies = [
  "active-win-pos-rs",
  "base64 0.22.1",
@@ -5956,6 +5996,12 @@ dependencies = [
  "directories",
  "fix-path-env",
  "fs_extra",
+ "image 0.25.5",
+ "jpeg-decoder",
+ "libc",
+ "lodepng",
+ "mozjpeg-sys",
+ "png",
  "screenshots",
  "serde",
  "serde_json",
@@ -5995,9 +6041,9 @@ dependencies = [
 
 [[package]]
 name = "zbus"
-version = "4.4.0"
+version = "5.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bb97012beadd29e654708a0fdb4c84bc046f537aecfde2c3ee0a9e4b4d48c725"
+checksum = "fb67eadba43784b6fb14857eba0d8fc518686d3ee537066eb6086dc318e2c8a1"
 dependencies = [
  "async-broadcast",
  "async-executor",
@@ -6009,37 +6055,6 @@ dependencies = [
  "async-task",
  "async-trait",
  "blocking",
- "enumflags2",
- "event-listener",
- "futures-core",
- "futures-sink",
- "futures-util",
- "hex",
- "nix 0.29.0",
- "ordered-stream",
- "rand 0.8.5",
- "serde",
- "serde_repr",
- "sha1",
- "static_assertions",
- "tracing",
- "uds_windows",
- "windows-sys 0.52.0",
- "xdg-home",
- "zbus_macros 4.4.0",
- "zbus_names 3.0.0",
- "zvariant 4.2.0",
-]
-
-[[package]]
-name = "zbus"
-version = "5.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fb67eadba43784b6fb14857eba0d8fc518686d3ee537066eb6086dc318e2c8a1"
-dependencies = [
- "async-broadcast",
- "async-recursion",
- "async-trait",
  "enumflags2",
  "event-listener",
  "futures-core",
@@ -6056,22 +6071,9 @@ dependencies = [
  "windows-sys 0.59.0",
  "winnow 0.6.22",
  "xdg-home",
- "zbus_macros 5.2.0",
- "zbus_names 4.1.0",
- "zvariant 5.1.0",
-]
-
-[[package]]
-name = "zbus_macros"
-version = "4.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "267db9407081e90bbfa46d841d3cbc60f59c0351838c4bc65199ecd79ab1983e"
-dependencies = [
- "proc-macro-crate 3.2.0",
- "proc-macro2",
- "quote",
- "syn 2.0.95",
- "zvariant_utils 2.1.0",
+ "zbus_macros",
+ "zbus_names",
+ "zvariant",
 ]
 
 [[package]]
@@ -6084,20 +6086,9 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.95",
- "zbus_names 4.1.0",
- "zvariant 5.1.0",
- "zvariant_utils 3.0.2",
-]
-
-[[package]]
-name = "zbus_names"
-version = "3.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b9b1fef7d021261cc16cba64c351d291b715febe0fa10dc3a443ac5a5022e6c"
-dependencies = [
- "serde",
- "static_assertions",
- "zvariant 4.2.0",
+ "zbus_names",
+ "zvariant",
+ "zvariant_utils",
 ]
 
 [[package]]
@@ -6109,7 +6100,7 @@ dependencies = [
  "serde",
  "static_assertions",
  "winnow 0.6.22",
- "zvariant 5.1.0",
+ "zvariant",
 ]
 
 [[package]]
@@ -6177,6 +6168,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "zune-core"
+version = "0.4.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3f423a2c17029964870cfaabb1f13dfab7d092a62a29a89264f4d36990ca414a"
+
+[[package]]
 name = "zune-inflate"
 version = "0.2.54"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6186,16 +6183,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "zvariant"
-version = "4.2.0"
+name = "zune-jpeg"
+version = "0.4.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2084290ab9a1c471c38fc524945837734fbf124487e105daec2bb57fd48c81fe"
+checksum = "99a5bab8d7dedf81405c4bb1f2b83ea057643d9cb28778cea9eecddeedd2e028"
 dependencies = [
- "endi",
- "enumflags2",
- "serde",
- "static_assertions",
- "zvariant_derive 4.2.0",
+ "zune-core",
 ]
 
 [[package]]
@@ -6210,21 +6203,8 @@ dependencies = [
  "static_assertions",
  "url",
  "winnow 0.6.22",
- "zvariant_derive 5.1.0",
- "zvariant_utils 3.0.2",
-]
-
-[[package]]
-name = "zvariant_derive"
-version = "4.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "73e2ba546bda683a90652bac4a279bc146adad1386f25379cf73200d2002c449"
-dependencies = [
- "proc-macro-crate 3.2.0",
- "proc-macro2",
- "quote",
- "syn 2.0.95",
- "zvariant_utils 2.1.0",
+ "zvariant_derive",
+ "zvariant_utils",
 ]
 
 [[package]]
@@ -6237,18 +6217,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.95",
- "zvariant_utils 3.0.2",
-]
-
-[[package]]
-name = "zvariant_utils"
-version = "2.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c51bcff7cc3dbb5055396bcf774748c3dab426b4b8659046963523cee4808340"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.95",
+ "zvariant_utils",
 ]
 
 [[package]]

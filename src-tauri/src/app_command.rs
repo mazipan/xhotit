@@ -2,7 +2,9 @@ use std::{path::PathBuf, process::Command as ProcessCommand};
 use tauri::{command, AppHandle, Emitter, Manager};
 
 use crate::{
-    app_directory::{get_app_directory, list_images_in_directory_sorted}, constant::{APP_DOWNLOAD_DIR, ON_SCREENSHOT_EVENT}, overlay::{reopen_main_window, toggle_overlay_window}, screenshot::{capture_monitor, capture_screen, capture_window, get_screenshot_path, SelectionCoords}
+    app_directory::{get_app_directory, list_images_in_directory_sorted}, app_win_manager::{reopen_main_window, toggle_compress_window, toggle_overlay_window}, constant::{APP_DOWNLOAD_DIR, ON_SCREENSHOT_EVENT}, image_compressor::{jpeg::process_jpeg, png::process_png, shared::ImageParams}, screenshot::{
+        capture_monitor, capture_screen, capture_window, get_screenshot_path, SelectionCoords,
+    }
 };
 
 /**
@@ -63,7 +65,7 @@ pub fn screenshot_monitor(app_handle: AppHandle) {
  */
 #[command]
 pub fn reset_app(app_handle: AppHandle) {
-    reopen_main_window(&app_handle)
+    reopen_main_window(&app_handle);
 }
 
 /**
@@ -100,5 +102,27 @@ pub fn open_app_directory(app_handle: AppHandle, subdirectory: Option<String>) {
             .arg(path)
             .spawn()
             .expect("ERROR: Failed to open directory");
+    }
+}
+
+/**
+ * When trigger open new compress-image window
+ */
+#[command]
+pub fn open_compress(app_handle: AppHandle) {
+    toggle_compress_window(&app_handle);
+}
+
+/**
+ * When trigger click Compress Image
+ */
+#[command]
+pub fn exec_compress(app_handle: AppHandle, image: ImageParams) {
+    if image.name.to_lowercase().contains(".png") {
+        process_png(app_handle, &image.src, image.quality, image.overwrite, image.filter)
+    } else if image.name.to_lowercase().contains(".jpg")
+        || image.name.to_lowercase().contains(".jpeg")
+    {
+        process_jpeg(app_handle, &image.src, image.quality, image.overwrite)
     }
 }

@@ -4,7 +4,9 @@
 
 Xhot it (read as "shot it") is just another screenshot app in your desktop: an experimental application. powered by [Tauri v2](https://v2.tauri.app/).
 
-![Screenshot](./screenshots/screenshot.png)
+| Welcome screen | Backdrop editor | Image compressor |
+| -------------- | --------------- | ---------------- |
+| ![welcome text](./screenshots/01-welcome-screen.png) | ![backdrop editor](./screenshots/02-backdrop-editor.png) | ![image compressor](./screenshots/03-image-compressor.png) |
 
 ![Screen Record](./screenshots/screenrecord.gif)
 
@@ -14,6 +16,7 @@ Xhot it (read as "shot it") is just another screenshot app in your desktop: an e
 - **🪟 Capture Active Window**: capture the active window only
 - **🖥️ Capture Screen**: capture the whole screen
 - **🎨 Backdrop Background**: setting backdrop background
+- **⚡️ Image Compression**: compress jpg or png (since v1.1.0)
 
 ## Download
 
@@ -53,8 +56,8 @@ xattr -c /Applications/Xhot It.app
 
 Prerequisites
 
-+ `bun`: https://bun.sh/docs/cli/install
-+ `rust`: https://www.rust-lang.org/tools/install
+- `bun`: https://bun.sh/docs/cli/install
+- `rust`: https://www.rust-lang.org/tools/install
 
 Install deps
 
@@ -70,9 +73,9 @@ bun run tdev
 
 ## Credits
 
-+ [dimaportenko/code-helper](https://github.com/dimaportenko/code-helper) for the base code
-+ [screenshots](https://crates.io/crates/screenshots) and [xcap](https://crates.io/crates/xcap) for capturing screen
-+ [active-win-pos-rs](https://crates.io/crates/active-win-pos-rs/) to detect active window position
+- [dimaportenko/code-helper](https://github.com/dimaportenko/code-helper) for the base code
+- [screenshots](https://crates.io/crates/screenshots) and [xcap](https://crates.io/crates/xcap) for capturing screen
+- [active-win-pos-rs](https://crates.io/crates/active-win-pos-rs/) to detect active window position
 
 ## Contributors
 

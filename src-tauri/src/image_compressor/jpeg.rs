@@ -192,7 +192,6 @@ unsafe fn encode_jpeg(buffer: &[u8], width: u32, height: u32, quality: i32, dest
 //     (width, height)
 // }
 
-
 pub fn get_dest_path_jpg(path_str: &str, overwrite: bool) -> String {
     if !path_str.contains(".min") && !overwrite {
         return replace_jpg_ext(path_str);
@@ -203,10 +202,10 @@ pub fn get_dest_path_jpg(path_str: &str, overwrite: bool) -> String {
 
 fn replace_jpg_ext(path_str: &str) -> String {
     let res = &path_str
-    .replace(".jpg", ".min.jpg")
-    .replace(".JPG", ".min.jpg")
-    .replace(".jpeg", ".min.jpeg")
-    .replace(".JPEG", ".min.jpeg");
+        .replace(".jpg", ".min.jpg")
+        .replace(".JPG", ".min.jpg")
+        .replace(".jpeg", ".min.jpeg")
+        .replace(".JPEG", ".min.jpeg");
 
     let str = String::from(res);
 

@@ -1,6 +1,6 @@
 [package]
 name = "xhotit"
-version = "1.1.0"
+version = "1.1.1"
 description = "Xhot It - Screen Capture"
 authors = ["Irfan Maulana"]
 edition = "2021"
@@ -18,7 +18,7 @@ edition = "2021"
 tauri-build = { version = "2.0.5", features = [] }
 
 [dependencies]
-tauri = { version = "2.2.1", features = [
+tauri = { version = "2.2.2", features = [
   "macos-private-api",
   "protocol-asset",
   "tray-icon",
@@ -31,6 +31,7 @@ tauri-plugin-window-state = "2.2.0"
 tauri-plugin-fs = "2.2.0"
 tauri-plugin-upload = "2.2.1"
 tauri-plugin-dialog = "2.2.0"
+tauri-plugin-log = "2.2.0"
 
 serde = { version = "1.0.217", features = ["derive"] }
 serde_json = "1.0.135"
@@ -43,7 +44,7 @@ fs_extra = "1.3.0"
 directories = "6.0.0"
 chrono = "0.4.39"
 active-win-pos-rs = "0.9"
-image = { version = "0.25", default-features = false, features = [
+image = { version = "0.25.5", default-features = false, features = [
   "jpeg",
   "ico",
   "png",
@@ -55,11 +56,12 @@ image = { version = "0.25", default-features = false, features = [
   "hdr",
   "dds",
 ] }
-png = "0.17"
-jpeg-decoder = "0.3"
-mozjpeg-sys = { version = "2.2", default-features = false }
-libc = "0.2"
-lodepng = { version = "3.10", default-features = false }
+png = "0.17.16"
+jpeg-decoder = "0.3.1"
+mozjpeg-sys = { version = "2.2.2", default-features = false }
+libc = "0.2.169"
+lodepng = { version = "3.10.7", default-features = false }
+log = "0.4.25"
 
 # [target."cfg(not(target_os = \"windows\"))".dependencies]
 fix-path-env = { git = "https://github.com/tauri-apps/fix-path-env-rs" }

@@ -1,12 +1,18 @@
-# 📸 Xhot It
+<div align="center">
+  <h1>📸 Xhot It</h1>
+</div>
 
-[![publish](https://github.com/mazipan/xhotit/actions/workflows/publish-to-manual-release.yml/badge.svg)](https://github.com/mazipan/xhotit/actions/workflows/publish-to-manual-release.yml) ![GitHub package.json version](https://img.shields.io/github/package-json/v/mazipan/xhotit) ![GitHub Release](https://img.shields.io/github/v/release/mazipan/xhotit)
+<div align="center">
+  <a href="https://github.com/mazipan/xhotit/actions"><img alt="Publish CI" src="https://github.com/mazipan/xhotit/actions/workflows/publish-to-manual-release.yml/badge.svg"></a>
+  <a href="https://github.com/mazipan/xhotit/releases"><img alt="Current Version" src="https://img.shields.io/github/package-json/v/mazipan/xhotit"></a>
+  <a href="https://github.com/mazipan/xhotit/releases"><img alt="Latest Release" src="https://img.shields.io/github/v/release/mazipan/xhotit"></a>
+  <p>Xhot it (read as "shot it") is just another screenshot app in your desktop: an experimental application. Powered by <a href="https://v2.tauri.app/" target="_blank" rel="noopener noreferrer">Tauri v2</a>.</p>
+  <img src="./screenshots/01-welcome-screen.png" alt="welcome to xhot it" height="200" />
+</div>
 
-Xhot it (read as "shot it") is just another screenshot app in your desktop: an experimental application. powered by [Tauri v2](https://v2.tauri.app/).
-
-| Welcome screen | Backdrop editor | Image compressor |
-| -------------- | --------------- | ---------------- |
-| ![welcome text](./screenshots/01-welcome-screen.png) | ![backdrop editor](./screenshots/02-backdrop-editor.png) | ![image compressor](./screenshots/03-image-compressor.png) |
+|                |                 |
+| -------------- | --------------- |
+| ![backdrop editor](./screenshots/02-backdrop-editor.png) | ![image compressor](./screenshots/03-image-compressor.png) |
 
 ![Screen Record](./screenshots/screenrecord.gif)
 
@@ -34,15 +40,15 @@ Download the executable files in our [release page](https://github.com/mazipan/x
 
 ### 2. Can not open the App
 
-![MacOS can not open](./screenshots/mac-cannot-open.png)
+<img src="./screenshots/mac-cannot-open.png" alt="MacOS can not open" height="150" />
 
-It was blocked by default in MacOS, you need to give an access to the installed app. Check these step by step:
+It was blocked and detected as malware by default in MacOS since we didn't do a code-signing. There is no plan to fix it in the near future. Meantime, you need to give an access manually. Check these step by step:
 
 - Go to `System Settings` > `Privacy & Security`
 - Scroll down to `Security` section
 - Make sure to "Open Anyway" when it's asked
 
-![MacOS open app anyway](./screenshots/mac-open-anyway.png)
+<img src="./screenshots/mac-open-anyway.png" alt="MacOS open app anyway" height="150" />
 
 ### 3. Resolve app is damaged
 
@@ -71,11 +77,19 @@ Run app in your local
 bun run tdev
 ```
 
+Debug build
+
+```bash
+bun run tdebug
+```
+
 ## Credits
 
 - [dimaportenko/code-helper](https://github.com/dimaportenko/code-helper) for the base code
 - [screenshots](https://crates.io/crates/screenshots) and [xcap](https://crates.io/crates/xcap) for capturing screen
 - [active-win-pos-rs](https://crates.io/crates/active-win-pos-rs/) to detect active window position
+- [lvandeve/lodepng](https://github.com/lvandeve/lodepng) to compress png
+- [kornelski/mozjpeg-sys](https://github.com/kornelski/mozjpeg-sys) to compress jpg
 
 ## Contributors
 

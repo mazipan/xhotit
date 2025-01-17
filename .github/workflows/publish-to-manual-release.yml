@@ -37,15 +37,16 @@ jobs:
               repo: context.repo.repo,
               tag_name: `release-v${process.env.PACKAGE_VERSION}`,
               name: `xhotit.v${process.env.PACKAGE_VERSION}`,
-              body: `Take a look at the assets to download and install this app.
+              body: `# New Release: v${process.env.PACKAGE_VERSION}
 
               ## 📦 Executable Assets
+
+              Take a look at the assets to download and install this app.
 
               - **🍏 Mac**:
                 - Silicon: ▶️ \`Xhot.It_aarch64.app.tar.gz\`
                 - Intel  : ▶️ \`Xhot.It_x64.app.tar.gz\`
               - **🪟 Windows**:
-                - ▶️ \`Xhot.It_[version]_x64_en-US.msi\`
                 - ▶️ \`Xhot.It_[version]_x64-setup.exe\`
               - **🐧 Linux**:
                 - ▶️ \`Xhot.It_[version]_amd64.deb\`
@@ -70,9 +71,9 @@ jobs:
           - platform: "macos-latest" # for Intel based macs.
             args: "--target x86_64-apple-darwin --bundles app"
           - platform: "ubuntu-22.04" # for Tauri v1 you could replace this with ubuntu-20.04.
-            args: ""
+            args: "--bundles deb,rpm"
           - platform: "windows-latest"
-            args: ""
+            args: "--bundles nsis"
 
     runs-on: ${{ matrix.platform }}
     steps:

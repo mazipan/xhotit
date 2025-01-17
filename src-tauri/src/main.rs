@@ -3,25 +3,23 @@
 
 mod app_command;
 mod app_directory;
-mod constant;
 mod app_win_manager;
-mod screenshot;
+mod app_menu;
+mod constant;
 mod image_compressor;
+mod screenshot;
 
 use app_command::{
-    get_screenshot_files, open_app_directory, open_overlay, reset_app, screenshot,
-    screenshot_active_window, screenshot_monitor, stop_screenshot, open_compress, exec_compress,
+    exec_compress, get_screenshot_files, open_app_directory, open_compress, open_overlay,
+    reset_app, screenshot, screenshot_active_window, screenshot_monitor, stop_screenshot,
 };
 
+use app_menu::get_menu_builder;
 use app_win_manager::{reopen_main_window, toggle_compress_window, toggle_overlay_window};
 use screenshot::{capture_monitor, capture_window};
 
 use fix_path_env::fix;
-use tauri::{
-    image::Image,
-    menu::{IconMenuItem, MenuBuilder, MenuItem},
-    tray::TrayIconBuilder,
-};
+use tauri::tray::TrayIconBuilder;
 use tauri_plugin_opener::OpenerExt;
 
 fn main() {
@@ -42,56 +40,11 @@ fn main() {
             #[cfg(target_os = "macos")]
             app.set_activation_policy(tauri::ActivationPolicy::Accessory);
 
-            let capture_area_icon = Image::from_path("./icons/menu/viewfinder-circle.png");
-            let capture_area_i = IconMenuItem::with_id(
-                app,
-                "capture_area",
-                "Capture Area",
-                true,
-                capture_area_icon.ok(),
-                Some("CmdOrCtrl+Shift+1"),
-            )?;
-
-            let capture_active_icon = Image::from_path("./icons/menu/camera.png");
-            let capture_active_i = IconMenuItem::with_id(
-                app,
-                "capture_active",
-                "Capture Active Window",
-                true,
-                capture_active_icon.ok(),
-                Some("CmdOrCtrl+Shift+2"),
-            )?;
-
-            let capture_screen_icon = Image::from_path("./icons/menu/computer-desktop.png");
-            let capture_screen_i = IconMenuItem::with_id(
-                app,
-                "capture_screen",
-                "Capture Screen",
-                true,
-                capture_screen_icon.ok(),
-                Some("CmdOrCtrl+Shift+3"),
-            )?;
-
-            let compress_i =
-                MenuItem::with_id(app, "compress_image", "Compress Image", true, Some("CmdOrCtrl+Shift+4"))?;
-
-            let reopen_i =
-                MenuItem::with_id(app, "reopen_app", "Reopen Xhot It", true, None::<&str>)?;
-
-            let report_bug_i =
-                MenuItem::with_id(app, "report_bug", "Report a Bug", true, None::<&str>)?;
-
-            let quit_i = MenuItem::with_id(app, "quit", "Quit", true, Some("CmdOrCtrl+Q"))?;
-
-            let menu_builder = MenuBuilder::new(app)
-                .items(&[&capture_area_i, &capture_active_i, &capture_screen_i, &compress_i])
-                .separator()
-                .items(&[&reopen_i, &report_bug_i, &quit_i])
-                .build()?;
+            let mb = get_menu_builder(app).build()?;
 
             let _tray = TrayIconBuilder::new()
                 .icon(app.default_window_icon().unwrap().clone())
-                .menu(&menu_builder)
+                .menu(&mb)
                 .on_menu_event(|app, event| match event.id.as_ref() {
                     "capture_area" => {
                         toggle_overlay_window(app);
@@ -111,6 +64,10 @@ fn main() {
                     "report_bug" => {
                         let opener = app.opener();
                         let _ = opener.open_url("https://github.com/mazipan/xhotit", None::<&str>);
+                    }
+                    "donate" => {
+                        let opener = app.opener();
+                        let _ = opener.open_url("https://www.mazipan.space/support", None::<&str>);
                     }
                     "quit" => {
                         app.exit(0);

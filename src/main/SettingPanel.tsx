@@ -53,7 +53,7 @@ export function SettingPanel({
             max="100"
             value={padding}
             onChange={onChangePadding}
-            className="w-full"
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
           />
         </div>
 
@@ -68,7 +68,7 @@ export function SettingPanel({
             max="100"
             value={bgRounded}
             onChange={onChangeBgRounded}
-            className="w-full"
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
           />
         </div>
 
@@ -83,7 +83,7 @@ export function SettingPanel({
             max="100"
             value={imgRounded}
             onChange={onChangeImgRounded}
-            className="w-full"
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
           />
         </div>
       </div>

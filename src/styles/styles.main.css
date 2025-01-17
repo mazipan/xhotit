@@ -62,22 +62,14 @@ h1 {
   transition: border-color 0.25s;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-}
 
-.btn:hover {
-  border-color: #396cd8;
-}
-
-.btn:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
+  @apply focus:ring-4 focus:ring-blue-300 focus:ring-offset-2 focus:outline-none dark:focus:ring-blue-800;
 }
 
 .btn.gradient {
-  position: relative;
-  background: #ffffff;
+  @apply relative bg-white hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-950;
 
-  &:before {
+  &::before {
     content: '';
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
@@ -85,6 +77,13 @@ h1 {
     margin: -2px;
     border-radius: inherit;
     background: linear-gradient(to right, rgb(236, 72, 153), rgb(239, 68, 68), rgb(234, 179, 8));
+  }
+
+  &:hover {
+
+    &::before {
+      background: linear-gradient(to right, rgb(234, 179, 8), rgb(239, 68, 68), rgb(236, 72, 153));
+    }
   }
 }
 
@@ -101,13 +100,5 @@ h1 {
   .btn {
     color: #ffffff;
     background-color: #0f0f0f98;
-  }
-
-  .btn.gradient {
-    background: #0f0f0f;
-  }
-
-  .btn:active {
-    background-color: #0f0f0f69;
   }
 }

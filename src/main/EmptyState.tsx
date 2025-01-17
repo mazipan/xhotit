@@ -1,7 +1,11 @@
 import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-dialog';
 import { downloadDir } from '@tauri-apps/api/path';
-import { ViewfinderCircleIcon, FolderOpenIcon, BoltIcon  } from '@heroicons/react/24/outline';
+import {
+  ViewfinderCircleIcon,
+  FolderOpenIcon,
+  BoltIcon,
+} from '@heroicons/react/24/outline';
 
 import { COMMAND } from '../constant';
 
@@ -33,16 +37,22 @@ export function EmptyState({
   return (
     <div className="relative h-screen w-full max-w-lg flex flex-col justify-center items-center gap-4 p-4 py-6 mx-auto">
       <div className="w-full relative mb-8 flex flex-col gap-2 items-center">
-        <h1 className="text-5xl font-semibold">
+        <div className="absolute top-0 -left-4 w-48 h-48 bg-purple-300 rounded-full opacity-70 mix-blend-multiply filter blur-xl animate-blob"></div>
+        <div className="absolute top-0 -right-4 w-48 h-48 bg-yellow-300 rounded-full opacity-70 mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-44 w-40 h-40 bg-pink-300 rounded-full opacity-70 mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
+
+        <h1 className="z-10 text-5xl font-semibold">
           Welcome to{' '}
           <span className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 inline-block text-transparent bg-clip-text">
             Xhot It
           </span>
         </h1>
 
-        <p className="font-medium text-xl">Just another screen capture app</p>
+        <p className="z-10 font-medium text-xl">
+          Just another screen capture app
+        </p>
 
-        <div className="bg-black rounded-full p-4 border-yellow-300 border-4">
+        <div className="bg-black rounded-full p-4 border-yellow-300 border-4 transition-transform transform duration-500 hover:rotate-180 z-10 cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="350"
@@ -67,10 +77,6 @@ export function EmptyState({
             ></path>
           </svg>
         </div>
-
-        <div className="absolute top-0 -left-4 w-48 h-48 bg-purple-300 rounded-full opacity-70 mix-blend-multiply filter blur-xl animate-blob"></div>
-        <div className="absolute top-0 -right-4 w-48 h-48 bg-yellow-300 rounded-full opacity-70 mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-8 left-44 w-40 h-40 bg-pink-300 rounded-full opacity-70 mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
       </div>
 
       <div className="flex flex-wrap gap-4 items-center">
@@ -98,6 +104,11 @@ export function EmptyState({
           Compress image
         </button>
       </div>
+
+      <p className="text-sm text-gray-400">
+        Version:{' '}
+        <span id="current-version">{'1.1.0'}</span>
+      </p>
     </div>
   );
 }

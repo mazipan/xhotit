@@ -13,7 +13,7 @@ export function SettingsPanel({ show }: { show: boolean }) {
   return (
     <div
       className={clsx(
-        'fixed top-20 right-4 z-20 rounded-lg w-[250px] max-h-[calc(100%-5rem)] transition-all duration-500 transform shadow-lg bg-slate-50 dark:bg-slate-800 shadow-xl',
+        'fixed top-20 right-4 z-20 rounded-lg w-[250px] max-h-[calc(100%-5rem)] transition-all duration-500 transform bg-slate-50 dark:bg-slate-800 shadow-xl',
         show ? 'translate-x-0' : 'translate-x-[110%]'
       )}
     >
@@ -48,12 +48,13 @@ export function SettingsPanel({ show }: { show: boolean }) {
             type="range"
             min="50"
             max="90"
+            step="10"
             value={settings.quality}
             onChange={(e) => {
               const newVal = e.target.value || '0';
               setSettingQuality(parseInt(newVal, 10));
             }}
-            className="w-full mt-2"
+            className="w-full mt-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
           />
         </div>
 

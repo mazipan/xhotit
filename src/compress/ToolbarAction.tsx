@@ -7,7 +7,6 @@ import {
 import styles from './compress.module.css';
 import { SpinnerIcon } from '../icons/Spinner';
 import clsx from 'clsx';
-import { useCompressAppStore } from './store';
 
 export function ToolbarAction({
   handleBack,

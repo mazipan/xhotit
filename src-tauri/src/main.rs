@@ -3,8 +3,8 @@
 
 mod app_command;
 mod app_directory;
-mod app_win_manager;
 mod app_menu;
+mod app_win_manager;
 mod constant;
 mod image_compressor;
 mod screenshot;
@@ -19,10 +19,22 @@ use app_win_manager::{reopen_main_window, toggle_compress_window, toggle_overlay
 use screenshot::{capture_monitor, capture_window};
 
 use fix_path_env::fix;
+use std::backtrace;
+use std::io::Write;
 use tauri::tray::TrayIconBuilder;
 use tauri_plugin_opener::OpenerExt;
 
 fn main() {
+    std::panic::set_hook(Box::new(|info| {
+        let backtrace = backtrace::Backtrace::force_capture();
+        println!("panic occurred: {:?}", info);
+
+        let _ = std::fs::File::create("xhotit_panic.log")
+            .and_then(|mut f| f.write_all(format!("{:?}\n{:#?}", info, backtrace).as_bytes()));
+
+        std::process::exit(1);
+    }));
+
     // Based on issue: https://github.com/tauri-apps/tauri/issues/7063
     // https://github.com/tauri-apps/fix-path-env-rs
     // #[cfg(not(target_os="windows"))]
@@ -31,6 +43,18 @@ fn main() {
     }
 
     tauri::Builder::default()
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                .level(log::LevelFilter::Warn)
+                .target(tauri_plugin_log::Target::new(
+                    tauri_plugin_log::TargetKind::LogDir {
+                        file_name: Some("logs".to_string()),
+                    },
+                ))
+                .timezone_strategy(tauri_plugin_log::TimezoneStrategy::UseLocal)
+                .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepAll)
+                .build(),
+        )
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_upload::init())
@@ -42,7 +66,7 @@ fn main() {
 
             let mb = get_menu_builder(app).build()?;
 
-            let _tray = TrayIconBuilder::new()
+            let _tray = TrayIconBuilder::with_id("xhotit-tray")
                 .icon(app.default_window_icon().unwrap().clone())
                 .menu(&mb)
                 .on_menu_event(|app, event| match event.id.as_ref() {
@@ -93,5 +117,5 @@ fn main() {
             exec_compress,
         ])
         .run(tauri::generate_context!())
-        .expect("ERROR: error while running tauri application");
+        .expect("ERROR: error while running Xhot It");
 }

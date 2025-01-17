@@ -76,7 +76,12 @@ pub fn create_compress_window(app: &AppHandle) {
         WebviewUrl::App(web_view_url.into()),
     );
 
-    let win = win_builder.resizable(true).title("Xhot It - Compress Image").center().min_inner_size(600.0, 400.0).build().unwrap();
+    let win = win_builder
+        .resizable(true)
+        .title("Xhot It - Compress Image")
+        .center()
+        .build()
+        .unwrap();
 
     win.show().unwrap();
 

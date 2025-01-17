@@ -7,10 +7,10 @@ use tauri::{AppHandle, Emitter};
 
 use crate::{
     app_directory::get_app_directory,
+    app_win_manager::open_main_window,
     constant::{
         APP_DOWNLOAD_DIR, ON_CAPTURE_MONITOR_EVENT, ON_GET_ACTIVE_WINDOW_EVENT, ON_SCREENSHOT_EVENT,
     },
-    app_win_manager::open_main_window,
 };
 
 // TODO: Migrate to XCap: https://github.com/nashaofu/xcap
@@ -120,9 +120,7 @@ pub fn capture_monitor(app_handle: &AppHandle) {
     let screenshot_path = get_screenshot_path(&app_handle);
 
     let screen = Screen::from_point(0, 0).unwrap();
-    let image = screen
-        .capture()
-        .unwrap();
+    let image = screen.capture().unwrap();
 
     image.save(&screenshot_path).unwrap();
 

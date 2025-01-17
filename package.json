@@ -1,7 +1,7 @@
 {
   "name": "xhotit",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,6 +16,7 @@
     "@tauri-apps/api": "~2.2.0",
     "@tauri-apps/plugin-dialog": "~2.2.0",
     "@tauri-apps/plugin-fs": "~2.2.0",
+    "@tauri-apps/plugin-log": "~2.2.0",
     "@tauri-apps/plugin-opener": "~2.2.4",
     "@tauri-apps/plugin-upload": "~2.2.1",
     "@tauri-apps/plugin-window-state": "~2.2.0",

@@ -107,7 +107,7 @@ export function EmptyState({
 
       <p className="text-sm text-gray-400">
         Version:{' '}
-        <span id="current-version">{'1.1.0'}</span>
+        <span id="current-version">{'1.1.1'}</span>
       </p>
     </div>
   );

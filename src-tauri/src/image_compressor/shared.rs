@@ -38,4 +38,3 @@ pub struct DecoderParam {
     pub overwrite: bool,
     pub filter: String,
 }
-

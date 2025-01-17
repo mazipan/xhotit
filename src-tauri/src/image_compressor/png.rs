@@ -81,7 +81,6 @@ pub fn process_png(app_handle: AppHandle, path_str: &str, q: i32, overwrite: boo
     }
 }
 
-
 pub fn get_dest_path_png(path_str: &str, overwrite: bool) -> String {
     if !path_str.contains(".min") && !overwrite {
         return replace_png_ext(path_str);

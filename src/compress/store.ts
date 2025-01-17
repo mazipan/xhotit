@@ -18,18 +18,18 @@ export type ImageEventPayload = {
   compressed: string;
 };
 
-export type PngFilter = 'MINSUM' | 'ENTROPY' | 'BRUTE_FORCE'
+export type PngFilter = 'MINSUM' | 'ENTROPY' | 'BRUTE_FORCE';
 
 export const PngFilterEnum = {
   MINSUM: 'MINSUM',
   ENTROPY: 'ENTROPY',
-  BRUTE_FORCE: 'BRUTE_FORCE'
-} as const
+  BRUTE_FORCE: 'BRUTE_FORCE',
+} as const;
 
 export type Settings = {
   quality: number;
   overwrite: boolean;
-  filter: PngFilter
+  filter: PngFilter;
 };
 
 export interface CompressAppState {
@@ -38,9 +38,9 @@ export interface CompressAppState {
   isProcessing: boolean;
   settings: Settings;
 
-  setSettingQuality: (payload: number) => void
-  toggleSettingOverwrite: () => void
-  setSettingFilter: (payload: PngFilter) => void
+  setSettingQuality: (payload: number) => void;
+  toggleSettingOverwrite: () => void;
+  setSettingFilter: (payload: PngFilter) => void;
 
   addImage: (payload: string) => void;
   setImages: (payload: ImageStat[]) => void;
@@ -69,6 +69,25 @@ export async function toImageStat(src: string): Promise<ImageStat | null> {
   };
 }
 
+export const calculateSaving = ({
+  origin,
+  compressed,
+}: {
+  origin: number;
+  compressed: number;
+}): number => {
+  let saving = 0;
+
+  if (origin === compressed) {
+    // Do nothing
+  } else if (compressed < origin) {
+    saving = ((origin - compressed) / origin) * 100;
+  } else {
+    saving = -(((compressed - origin) / origin) * 100);
+  }
+
+  return saving;
+};
 export const useCompressAppStore = create<CompressAppState>()(
   persist(
     (set, get) => ({
@@ -79,35 +98,34 @@ export const useCompressAppStore = create<CompressAppState>()(
       settings: {
         overwrite: false,
         quality: 70,
-        filter: 'MINSUM'
+        filter: 'MINSUM',
       },
 
       setSettingQuality: (payload) => {
         set((state) => ({
           settings: {
             ...state.settings,
-            quality: payload
-          }
-        }))
+            quality: payload,
+          },
+        }));
       },
-
 
       toggleSettingOverwrite: () => {
         set((state) => ({
           settings: {
             ...state.settings,
-            overwrite: !state.settings.overwrite
-          }
-        }))
+            overwrite: !state.settings.overwrite,
+          },
+        }));
       },
 
       setSettingFilter: (payload) => {
         set((state) => ({
           settings: {
             ...state.settings,
-            filter: payload
-          }
-        }))
+            filter: payload,
+          },
+        }));
       },
 
       addImage: async (payload) => {
@@ -167,15 +185,10 @@ export const useCompressAppStore = create<CompressAppState>()(
 
         const pSrc = convertFileSrc(payload.compressed);
         const newSize = await getImageSize(pSrc);
-        let saving = 0;
-
-        if (newSize === matchImage.file_size) {
-          // Do nothing
-        } else if (newSize < matchImage.file_size) {
-          saving = (newSize / matchImage.file_size) * 100;
-        } else {
-          saving = -((newSize / matchImage.file_size) * 100);
-        }
+        const saving = calculateSaving({
+          origin: matchImage.file_size,
+          compressed: newSize,
+        });
 
         set((state) => ({
           images: state.images.map((i) => {
